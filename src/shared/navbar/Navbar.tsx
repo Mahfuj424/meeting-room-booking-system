@@ -5,6 +5,8 @@ import { useDarkMode } from "../../DarkModeContext";
 import { RxCross2 } from "react-icons/rx";
 import CustomButton from "../../components/customButton/CustomButton";
 import MobileNavbar from "./MobileNavbar";
+import { TiWeatherSunny } from "react-icons/ti";
+import { BsMoonStarsFill } from "react-icons/bs";
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -24,8 +26,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-darkBg py-3 px-4">
-      <div className="max-w-[1200px] mx-auto flex justify-between items-center">
+    <nav className="bg-white dark:bg-darkBg py-3 px-4 fixed w-full z-30">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to={"/"}>
           <div className="flex items-center gap-1">
             <img
@@ -33,7 +35,7 @@ const Navbar = () => {
               className="object-cover w-10 h-10 bg-primary rounded-full border-2 border-primary dark:text-white"
               alt="RoomEase Logo"
             />
-            <h1 className="text-3xl text-secondary dark:text-primary font-semibold">
+            <h1 className="text-3xl text-secondary dark:text-white font-semibold">
               RoomEase
             </h1>
           </div>
@@ -98,7 +100,17 @@ const Navbar = () => {
                   toggleDarkMode();
                 }}
               >
-                {darkMode ? "Light Mode" : "Dark Mode"}
+                {darkMode ? (
+                  <div className="flex text-primary items-center gap-1">
+                    <TiWeatherSunny />
+                    <h1>Light</h1>
+                  </div>
+                ) : (
+                  <div className="flex text-primary items-center gap-1">
+                    <BsMoonStarsFill />
+                    <h1>Dark</h1>
+                  </div>
+                )}
               </button>
             </div>
           )}

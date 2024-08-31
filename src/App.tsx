@@ -1,11 +1,13 @@
+// src/App.tsx
+
 import Main from "./layout/Main";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div>
-      <Main/>
+      <Main />
     </div>
   );
-}
+};
 
 export default App;

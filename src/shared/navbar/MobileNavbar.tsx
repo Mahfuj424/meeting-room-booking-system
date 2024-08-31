@@ -1,13 +1,17 @@
 import { RxCross2 } from "react-icons/rx";
-import {
-  FaRegUserCircle,
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
-import { NavLink, Link } from 'react-router-dom';
+import { FaRegUserCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
+import { TiWeatherSunny } from "react-icons/ti";
+import { BsMoonStarsFill } from "react-icons/bs";
 
-const MobileNavbar = ({ drawerOpen, closeDrawer, toggleUserMenu, darkMode, toggleDarkMode }) => {
+const MobileNavbar = ({
+  drawerOpen,
+  closeDrawer,
+  toggleUserMenu,
+  darkMode,
+  toggleDarkMode,
+}) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleUserMenuToggle = () => {
@@ -73,7 +77,17 @@ const MobileNavbar = ({ drawerOpen, closeDrawer, toggleUserMenu, darkMode, toggl
                     closeDrawer();
                   }}
                 >
-                  {darkMode ? "Light Mode" : "Dark Mode"}
+                  {darkMode ? (
+                    <div className="flex text-primary items-center gap-1">
+                      <TiWeatherSunny />
+                      <h1>Light</h1>
+                    </div>
+                  ) : (
+                    <div className="flex text-primary items-center gap-1">
+                      <BsMoonStarsFill />
+                      <h1>Dark</h1>
+                    </div>
+                  )}
                 </button>
               </div>
             )}
