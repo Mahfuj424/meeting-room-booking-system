@@ -7,14 +7,20 @@ import { FiSend } from "react-icons/fi";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-100  dark:bg-darkCard text-secondary dark:text-gray-300 py-8 px-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-5">
         {/* Logo & Description */}
         <div className="flex flex-col items-start">
           <div className="flex items-center gap-1">
-          <img src="../../../public/roomLogo (2).png" alt="Logo" className="mb-4 w-16 h-16" />
-          <h1 className="text-2xl font-semibold text-secondary dark:text-white mb-3">RoomEase</h1>
+            <img
+              src="https://i.ibb.co/3S7g2XP/room-Logo-2.png"
+              alt="Logo"
+              className="mb-4 w-16 h-16"
+            />
+            <h1 className="text-2xl font-semibold text-secondary dark:text-white mb-3">
+              RoomEase
+            </h1>
           </div>
-          
+
           <div className="flex space-x-4 mt-4">
             <a
               href="#"
@@ -50,56 +56,79 @@ const Footer: React.FC = () => {
 
         {/* Quick Links */}
         <div className="flex flex-col">
-          <h2 className="text-lg font-semibold mb-4 ms-12">Quick Links</h2>
-          <div className="flex justify-around">
-            <div>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:underline">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Reservation
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Offers
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <ul>
-                <li>
-                  <a href="#" className="hover:underline">
-                    FAQ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Room List
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    About Us
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <h2 className="text-lg font-semibold mb-4 ">Quick Links</h2>
+          <div>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="hover:underline">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Reservation
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Offers
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Room List
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  About Us
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* contact us */}
+        <div className="flex flex-col">
+          <h2 className="text-lg font-semibold mb-4 ">Contact-Us</h2>
+          <div>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="hover:underline">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Reservation
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Offers
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Room List
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  About Us
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 

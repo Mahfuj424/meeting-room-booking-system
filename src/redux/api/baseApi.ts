@@ -1,28 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  createApi,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
-import { RootState } from "../store";
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/v1",
-  credentials: "include",
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth.token;
-
-    // If we have a token set in state, let's assume that we should be passing it.
-    if (token) {
-      headers.set("authorization", `${token}`);
-    }
-
-    return headers;
-  },
-});
-
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: baseQuery,
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000/api",
+    credentials: "include",
+  }),
   endpoints: () => ({}),
 });

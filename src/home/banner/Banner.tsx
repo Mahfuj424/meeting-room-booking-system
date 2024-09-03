@@ -22,7 +22,7 @@ const Banner = () => {
       </div>
       <div className="image-content lg:w-1/2 mt-8 lg:mt-0">
         <img
-          src="../../../public/images/bannerRoomImage.webp"
+          src="https://i.ibb.co/M5rF11m/banner-Room-Image.webp"
           alt="room booking"
           className="max-w-full h-auto"
         />

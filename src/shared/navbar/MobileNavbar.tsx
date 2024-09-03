@@ -5,17 +5,26 @@ import { useState } from "react";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
 
-const MobileNavbar = ({
+interface MobileNavbarProps {
+  drawerOpen: boolean;
+  closeDrawer: () => void;
+  toggleUserMenu: () => void;
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+}
+
+const MobileNavbar: React.FC<MobileNavbarProps> = ({
   drawerOpen,
   closeDrawer,
   toggleUserMenu,
   darkMode,
   toggleDarkMode,
 }) => {
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
 
   const handleUserMenuToggle = () => {
     setUserMenuOpen(!userMenuOpen);
+    toggleUserMenu(); // Optional, if needed based on logic
   };
 
   return (

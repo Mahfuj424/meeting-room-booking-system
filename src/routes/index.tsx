@@ -4,6 +4,7 @@ import Main from "../layout/Main";
 import { createBrowserRouter } from "react-router-dom";
 import ContactUs from "../pages/contactUs/ContactUs";
 import AboutUs from "../pages/aboutUs/AboutUs";
+import AuthPage from "../shared/login/Login";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
     ],
+  },
+  {
+    path: "/auth",
+    element: <AuthPage />,
   },
 ]);
 

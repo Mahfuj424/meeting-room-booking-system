@@ -1,11 +1,10 @@
-import React from "react";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "./styles.css";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import ReactStars from "react-rating-stars-component";
 import { motion } from "framer-motion";
 import SectionHeader from "../../shared/sectionHeader/SectionHeader";
 
@@ -147,13 +146,13 @@ const Testimonial = () => {
                   <p className="testimonial-title text-gray-600 dark:text-gray-400">
                     {testimonial.title}
                   </p>
-                  <ReactStars
+                  {/* <ReactStars
                     count={5}
                     value={testimonial.rating}
                     size={24}
                     activeColor="#ffd700"
                     edit={false}
-                  />
+                  /> */}
                 </div>
               </motion.div>
             </SwiperSlide>

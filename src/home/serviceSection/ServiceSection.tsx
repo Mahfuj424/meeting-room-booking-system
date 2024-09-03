@@ -31,22 +31,22 @@ const ServiceSection: React.FC = () => {
         <ServiceItem
           title="Real-Time Availability"
           description="Check availability in real-time."
-          imageUrl="../../../public/images/service1.png"
+          imageUrl="https://i.ibb.co/5r8vNBT/service1.png"
         />
         <ServiceItem
           title="Instant Booking Confirmation"
           description="Receive confirmation instantly."
-          imageUrl="../../../public/images/service2.png"
+          imageUrl="https://i.ibb.co/6nJqgX6/service2.png"
         />
         <ServiceItem
           title="Flexible Scheduling"
           description="Schedule your services flexibly."
-          imageUrl="../../../public/images/service3.png"
+          imageUrl="https://i.ibb.co/4F6zsym/service3.png"
         />
         <ServiceItem
           title="24/7 Support"
           description="We are here for you, anytime."
-          imageUrl="../../../public/images/service4.png"
+          imageUrl="https://i.ibb.co/4s6GGvH/service4.png"
         />
       </div>
     </div>
