@@ -141,7 +141,7 @@ const AuthPage: React.FC = () => {
               <input
                 type="file"
                 {...register("image")}
-                className="mb-4 w-full border border-gray-300 dark:border-gray-600 p-2 rounded file:bg-white dark:file:bg-darkBg file:text-white file:px-4 file:py-2 file:rounded file:border-none"
+                className="mb-4 w-full border border-gray-300 dark:border-gray-600 p-2 rounded file:bg-white dark:file:bg-darkBg file:text-white file:px-4 file:py-2 text-center file:rounded file:border-none"
                 accept="image/*"
                 onChange={handleImageChange}
               />

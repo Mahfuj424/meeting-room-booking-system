@@ -9,7 +9,7 @@ import { BsMoonStarsFill } from "react-icons/bs";
 import { LuLogOut } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppSelector } from "../../redux/hook";
+import { useAppSelector } from "../../redux/hook"
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -19,7 +19,6 @@ const Navbar = () => {
 
   const logout = useSelector(logOut);
   const user = useAppSelector(selectCurrentUser);
-  console.log(user);
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -73,10 +72,11 @@ const Navbar = () => {
           ))}
 
           {/* Login Button */}
-
-          <NavLink to="/auth">
-            <CustomButton name={"Login"} />
-          </NavLink>
+          {!user && (
+            <NavLink to="/auth">
+              <CustomButton name={"Login"} />
+            </NavLink>
+          )}
         </div>
         {/* User Icon with Dropdown */}
         <div className="relative md:block hidden">
@@ -103,6 +103,12 @@ const Navbar = () => {
                     className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     My Booking
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Dashboard
                   </Link>
                   <button
                     className="block w-full text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"

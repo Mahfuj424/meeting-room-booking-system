@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import CustomButton from "../customButton/CustomButton";
+import CustomButton from './../customButton/CustomButton';
 
 type CustomCardProps = {
   imageUrl: string;
@@ -24,7 +24,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white dark:bg-darkCard rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="relative">
         <img
           src={imageUrl}
@@ -41,9 +41,9 @@ const CustomCard: React.FC<CustomCardProps> = ({
         </button>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold mb-2">{roomName}</h3>
-        <p className="text-gray-600 mb-2">{capacity}</p>
-        <p className="text-gray-800 font-bold mb-4">{price}</p>
+        <h3 className="text-lg dark:text-white font-semibold mb-2">{roomName}</h3>
+        <p className="text-gray-600 dark:text-white mb-2">{capacity}</p>
+        <p className="text-gray-800 dark:text-white font-bold mb-4">{price}</p>
         <div onClick={onSeeDetails}>
           <CustomButton name="See Details"/>
         </div>
