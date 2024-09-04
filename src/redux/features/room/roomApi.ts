@@ -8,7 +8,14 @@ const roomApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    createRoom: builder.mutation({
+      query: (roomInfo) => ({
+        url: "/rooms",
+        method: "POST",
+        body: roomInfo,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllRoomsQuery } = roomApi;
+export const { useGetAllRoomsQuery, useCreateRoomMutation } = roomApi;

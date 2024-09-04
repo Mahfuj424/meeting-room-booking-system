@@ -17,12 +17,16 @@ import { useDarkMode } from "../../DarkModeContext";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hook";
 
+
+
 const DashboardLayout: React.FC = () => {
+
   const user = useAppSelector(selectCurrentUser);
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSection, setOpenSection] = useState<string | null>(null);
+
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
@@ -52,7 +56,7 @@ const DashboardLayout: React.FC = () => {
             {sidebarOpen ? <BsChevronLeft /> : <BsChevronRight />}
           </button>
 
-          {user?.role !== "admin" && (
+          {user?.role === "admin" && (
             <>
               <div className="">
                 <h2
@@ -143,7 +147,7 @@ const DashboardLayout: React.FC = () => {
                   className="object-cover md:w-10 w-6 md:h-10 h-6 bg-primary rounded-full border-2 border-primary dark:text-white"
                   alt="RoomEase Logo"
                 />
-                <h1 className="md:text-3xl text-secondary dark:text-white font-semibold">
+                <h1 className="md:text-2xl text-secondary dark:text-white font-semibold">
                   RoomEase
                 </h1>
               </div>
@@ -183,7 +187,7 @@ const DashboardLayout: React.FC = () => {
         </header>
 
         {/* Dynamic Content */}
-        <main className="p-4 flex-1">
+        <main className="p-4 flex-1 h-screen overflow-y-auto">
           <Outlet />
         </main>
       </div>

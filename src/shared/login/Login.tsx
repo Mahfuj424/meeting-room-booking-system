@@ -89,7 +89,7 @@ const AuthPage: React.FC = () => {
           password: data.password!,
           address: data.address,
           phone: data.phoneNumber,
-          role: "user",
+          role: "admin",
           image: imageUrl,
         };
 

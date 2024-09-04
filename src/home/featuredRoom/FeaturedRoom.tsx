@@ -1,12 +1,11 @@
-import { useGetAllRoomsQuery } from "../../redux/features/room/roomApi";
+
 import CustomCard from "../../components/customCard/CustomCard";
 import SectionHeader from "../../shared/sectionHeader/SectionHeader";
 
 const FeaturedRoom = () => {
   const handleSeeDetails = () => {};
 
-  const { data } = useGetAllRoomsQuery(undefined);
-  const room = data?.data
+
 
   return (
     <div className="max-w-7xl mx-auto">
