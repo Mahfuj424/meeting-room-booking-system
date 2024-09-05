@@ -8,8 +8,8 @@ import AuthPage from "../shared/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CreateRoom from "../pages/dashboard/D-component/admin/room/CreateRoom";
 import RoomList from "../pages/dashboard/D-component/admin/room/RoomList";
-import CreateSlot from "../pages/dashboard/D-component/admin/CreateSlots";
-import SlotsList from "../pages/dashboard/D-component/admin/SlotsList";
+import CreateSlot from "../pages/dashboard/D-component/admin/slot/CreateSlots";
+import SlotsList from "../pages/dashboard/D-component/admin/slot/SlotsList";
 import Booking from "../pages/dashboard/D-component/user/BookingList";
 
 const router = createBrowserRouter([

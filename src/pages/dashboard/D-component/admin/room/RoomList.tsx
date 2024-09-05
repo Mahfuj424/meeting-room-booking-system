@@ -1,4 +1,5 @@
 import React from "react";
+import SyncLoader from "react-spinners/SyncLoader";
 
 import RoomListitem from "./RoomListitem";
 import { useGetAllRoomsQuery } from "../../../../../redux/features/room/roomApi";
@@ -12,11 +13,11 @@ type TRoom = {
 };
 
 const RoomList: React.FC = () => {
-  const { data } = useGetAllRoomsQuery(undefined);
+  const { data, isLoading } = useGetAllRoomsQuery(undefined);
   const roomData = data?.data;
 
   return (
-    <div>
+    <div className="overflow-x-auto mx-auto">
       <table className="min-w-full bg-white border-gray-200">
         <thead className="border-y-2">
           <tr>
@@ -35,9 +36,15 @@ const RoomList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {roomData?.map((room: TRoom) => (
-            <RoomListitem room={room}></RoomListitem>
-          ))}
+          {isLoading ? (
+            <div className="text-primary flex justify-center mt-10">
+              <SyncLoader />
+            </div>
+          ) : (
+            roomData?.map((room: TRoom) => (
+              <RoomListitem room={room}></RoomListitem>
+            ))
+          )}
         </tbody>
       </table>
     </div>
