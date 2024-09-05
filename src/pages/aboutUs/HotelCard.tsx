@@ -5,7 +5,7 @@ interface Props {}
 
 const HotelCard: React.FC<Props> = () => {
   return (
-    <div className="bg-slate-200 pb-8 dark:bg-darkBg">
+    <div className="bg-[#f7f5f7] pb-8 dark:bg-darkBg">
       <div className="flex mt-20 max-w-7xl mx-auto flex-col lg:flex-row dark:bg-darkBg p-6 rounded-lg ">
         <div className="relative">
           <div className="lg:w-[700px] flex justify-center">
