@@ -10,6 +10,7 @@ import {
   useUpdateSlotMutation,
 } from "../../../../../redux/features/slot/slotsApi";
 import { BiLoaderCircle } from "react-icons/bi";
+import { toast } from "sonner"; // Importing the toast
 
 interface Slot {
   _id: string;
@@ -33,7 +34,6 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
   const [updateSlot, { isLoading }] = useUpdateSlotMutation();
 
   // State for form inputs
-
   const [date, setDate] = useState(Slot?.date || "");
   const [startTime, setStartTime] = useState(Slot?.startTime || "");
   const [endTime, setEndTime] = useState(Slot?.endTime || "");
@@ -41,7 +41,6 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
   useEffect(() => {
     // Convert ISO date string to 'YYYY-MM-DD' format for date input
     const formattedDate = Slot?.date ? Slot?.date.split("T")[0] : "";
-
     setDate(formattedDate);
     setStartTime(Slot?.startTime || "");
     setEndTime(Slot?.endTime || "");
@@ -63,32 +62,28 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
     return format(zonedDate, "yyyy-MM-dd", { timeZone });
   };
 
-  // Format start and end times to show only hours and minutes
-  const formatTime = (timeString: string) => {
-    const [hours, minutes] = timeString.split(":");
-    return `${hours}:${minutes}`;
-  };
-
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const updatedSlotData = {
+      room: Slot?.room?._id,
       date,
+      startTime,
+      endTime,
     };
-
     try {
-      await updateSlot(updatedSlotData).unwrap();
+      await updateSlot({ id: Slot?._id, ...updatedSlotData }).unwrap();
       Swal.fire({
         title: "Updated!",
         text: "Slot details have been updated.",
         icon: "success",
       });
       close();
-    } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to update Slot details.",
-        icon: "error",
-      });
+    } catch (error: any) {
+      const errorMessage =
+        error?.data?.message || "Failed to update Slot details.";
+
+      // Displaying the error using toast
+      toast.error(errorMessage);
     }
   };
 
@@ -110,12 +105,12 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
             text: "The Slot has been deleted.",
             icon: "success",
           });
-        } catch (error) {
-          Swal.fire({
-            title: "Error!",
-            text: "Failed to delete the Slot.",
-            icon: "error",
-          });
+        } catch (error: any) {
+          const errorMessage =
+            error?.data?.message || "Failed to delete the Slot.";
+
+          // Displaying the error using toast
+          toast.error(errorMessage);
         }
       }
     });
@@ -124,6 +119,7 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
   return (
     <>
       <tr className="bg-white border-b text-center">
+        {/* Table Data */}
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
           {Slot?.room?.name}
         </td>
@@ -134,10 +130,10 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
           {formatDate(Slot?.date)}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {formatTime(Slot?.startTime)}
+          {Slot?.startTime}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {formatTime(Slot?.endTime)}
+          {Slot?.endTime}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           <div className="flex gap-5 justify-center">
@@ -181,6 +177,7 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
             onSubmit={handleFormSubmit}
             className="space-y-4 p-4 max-w-2xl mx-auto"
           >
+            {/* Form Inputs */}
             <div>
               <label
                 htmlFor="date"
@@ -193,7 +190,6 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
                 readOnly
                 id="date"
                 value={Slot?.room?.name}
-                onChange={(e) => setDate(e.target.value)}
                 className="mt-1 py-3 ps-3 block w-full border border-gray-300 rounded-md shadow-sm"
               />
             </div>
@@ -223,7 +219,6 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
                 type="time"
                 id="startTime"
                 value={startTime}
-                readOnly
                 onChange={(e) => setStartTime(e.target.value)}
                 className="mt-1 py-3 ps-3 block w-full border border-gray-300 rounded-md shadow-sm"
               />
@@ -239,7 +234,6 @@ const SlotListItem: React.FC<SlotListItemProps> = ({ Slot }) => {
                 type="time"
                 id="endTime"
                 value={endTime}
-                readOnly
                 onChange={(e) => setEndTime(e.target.value)}
                 className="mt-1 py-3 ps-3 block w-full border border-gray-300 rounded-md shadow-sm"
               />
