@@ -7,6 +7,7 @@ const FeaturedRoom = () => {
 
   const { data } = useGetAllRoomsQuery(undefined); // Fetching room data
   const rooms = data?.data;
+  console.log(rooms);
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -15,8 +16,9 @@ const FeaturedRoom = () => {
         description="Experience unmatched comfort and elegance in our Luxury Rooms, designed for those who appreciate the finer things in life."
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {rooms?.map((room) =>
+        {rooms?.map((room) => (
           <CustomCard
+            id={room?._id}
             key={room.roomNo} // Assuming roomNo as the unique key
             images={room.images} // Using dynamic room images array
             roomName={room.name} // Dynamic room name
@@ -24,7 +26,7 @@ const FeaturedRoom = () => {
             price={`$${room.pricePerSlot} / per slot`} // Dynamic price per slot
             onSeeDetails={handleSeeDetails}
           />
-        )}
+        ))}
       </div>
     </div>
   );

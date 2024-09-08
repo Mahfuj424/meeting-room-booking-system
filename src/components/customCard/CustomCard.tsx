@@ -11,13 +11,14 @@ import "swiper/css/navigation";
 
 import "./styles.css";
 import { Pagination, Navigation } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 type CustomCardProps = {
   images: string[]; // Assuming images is an array of image URLs
   roomName: string;
   capacity: string;
   price: string;
-  onSeeDetails: () => void;
+  id: string
 };
 
 const CustomCard: React.FC<CustomCardProps> = ({
@@ -25,7 +26,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
   roomName,
   capacity,
   price,
-  onSeeDetails,
+  id
 }) => {
   const [liked, setLiked] = useState(false);
 
@@ -78,8 +79,10 @@ const CustomCard: React.FC<CustomCardProps> = ({
         </h3>
         <p className="text-gray-600 dark:text-white mb-2">{capacity}</p>
         <p className="text-gray-800 dark:text-white font-bold mb-4">{price}</p>
-        <div onClick={onSeeDetails}>
-          <CustomButton name="See Details" />
+        <div>
+          <Link to={`/roomDetails/${id}`}>
+            <CustomButton name="See Details" />
+          </Link>
         </div>
       </div>
     </div>

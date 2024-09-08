@@ -37,7 +37,7 @@ const RoomList: React.FC = () => {
         </thead>
         <tbody>
           {isLoading ? (
-            <div className="text-primary flex justify-center mt-10">
+            <div className="text-primary flex h-screen justify-center mt-10">
               <SyncLoader />
             </div>
           ) : (

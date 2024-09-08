@@ -11,6 +11,7 @@ import RoomList from "../pages/dashboard/D-component/admin/room/RoomList";
 import CreateSlot from "../pages/dashboard/D-component/admin/slot/CreateSlots";
 import SlotsList from "../pages/dashboard/D-component/admin/slot/SlotsList";
 import Booking from "../pages/dashboard/D-component/user/BookingList";
+import RoomDetails from "../pages/roomDetails/RoomDetails";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/meeting-rooms",
         element: <MeetingRooms />,
+      },
+      {
+        path: "/roomDetails/:id",
+        element: <RoomDetails />,
       },
       {
         path: "/contact-us",
