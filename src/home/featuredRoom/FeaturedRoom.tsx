@@ -5,12 +5,12 @@ import SectionHeader from "../../shared/sectionHeader/SectionHeader";
 const FeaturedRoom = () => {
   const handleSeeDetails = () => {};
 
-  const { data } = useGetAllRoomsQuery(undefined); // Fetching room data
+  const { data } = useGetAllRoomsQuery({sortby:'Default'}); // Fetching room data
   const rooms = data?.data;
   console.log(rooms);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4">
       <SectionHeader
         title="Our Luxury Rooms"
         description="Experience unmatched comfort and elegance in our Luxury Rooms, designed for those who appreciate the finer things in life."

@@ -3,9 +3,26 @@ import { baseApi } from "../../../redux/api/baseApi";
 const roomApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllRooms: builder.query({
-      query: () => ({
+      query: ({
+        search,
+        capacity,
+        minPrice,
+        maxPrice,
+        sortBy,
+        page = 1,
+        limit =6,
+      }) => ({
         url: "/rooms",
         method: "GET",
+        params: {
+          search,
+          capacity,
+          minPrice,
+          maxPrice,
+          sortBy,
+          page,
+          limit,
+        },
       }),
       providesTags: ["Room"], // Add providesTags for automatic refetch
     }),

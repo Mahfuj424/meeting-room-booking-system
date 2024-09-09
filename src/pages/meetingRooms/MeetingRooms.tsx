@@ -1,162 +1,317 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton2 from "../../components/customButton/CustomButton";
-import { Slider } from "@mui/material";
-import { RiArrowDropDownLine } from "react-icons/ri";
 import { useGetAllRoomsQuery } from "../../redux/features/room/roomApi";
 import CustomCard from "../../components/customCard/CustomCard";
+import Slider from "@mui/material/Slider"; // Assuming you use Material UI for sliders
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const FilterPanel: React.FC = () => {
-  const [isPriceOpen, setIsPriceOpen] = useState(false);
-  const [isCapacityOpen, setIsCapacityOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 90]);
-  const [capacityRange, setCapacityRange] = useState([0, 100]);
+  const [actualPrice, setActualPrice] = useState([0, 200]); // Actual price range
+  const [maxPrice, setMaxPrice] = useState(200); // Max price
+  const [capacityRange, setCapacityRange] = useState([0, 100]); // Default range
   const [searchText, setSearchText] = useState("");
-  const [sortBy, setSortBy] = useState("featured");
+  const [sortBy, setSortBy] = useState("Default"); // Sort by state
+  const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Toggle sort dropdown
+  const [isCapacityOpen, setIsCapacityOpen] = useState(false);
 
-  // Fetch the room data from the server
-  const { data: rooms, isLoading } = useGetAllRoomsQuery({
+  // Fetch room data
+  const { data, isLoading } = useGetAllRoomsQuery({
     search: searchText,
     capacity: capacityRange[1],
-    minPrice: priceRange[0],
-    maxPrice: priceRange[1],
-    sortBy: sortBy,
+    minPrice: actualPrice[0],
+    maxPrice: actualPrice[1],
+    sortBy: sortBy, // Pass the sort by value
   });
-
-  // Toggle dropdowns for capacity and price
-  const togglePrice = () => setIsPriceOpen(!isPriceOpen);
-  const toggleCapacity = () => setIsCapacityOpen(!isCapacityOpen);
+  const rooms = data?.data;
+  console.log(rooms);
 
   // Clear all filters (reset sliders)
   const clearFilters = () => {
     setPriceRange([0, 90]);
-    setCapacityRange([0, 100]);
+    setActualPrice([0, 200]); // Reset actual price range
+    setCapacityRange([0, 100]); // Reset capacity range
     setSearchText("");
-    setSortBy("featured");
+    setSortBy("Default"); // Reset sorting
   };
 
-  // Handle slider changes for price
+  useEffect(() => {
+    // Assume maxPrice is fetched from data dynamically, set the maxPrice
+    const fetchedMaxPrice = 300; // Example maximum price
+    setMaxPrice(fetchedMaxPrice);
+    setActualPrice([0, fetchedMaxPrice]); // Set actual price range
+  }, []);
+
   const handlePriceChange = (event: Event, newValue: number | number[]) => {
+    // newValue corresponds to a number between 0 and 10 (the slider range)
+    const minPrice = Math.floor((newValue as number[])[0] * (maxPrice / 10));
+    const maxPriceValue = Math.floor(
+      (newValue as number[])[1] * (maxPrice / 10)
+    );
     setPriceRange(newValue as number[]);
+    setActualPrice([minPrice, maxPriceValue]);
   };
 
-  // Handle slider changes for capacity
-  const handleCapacityChange = (event: Event, newValue: number | number[]) => {
-    setCapacityRange(newValue as number[]);
+  const handleCapacityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.split("-").map(Number); // Convert string to array of numbers
+    setCapacityRange(value);
+  };
+
+  // Handle sort by selection
+  const handleSortByChange = (value: string) => {
+    setSortBy(value);
+    setIsSortDropdownOpen(false); // Close dropdown after selection
+  };
+
+  // Handle search function
+  const handleSearch = () => {
+    console.log("Searching for:", searchText);
+    // Perform search or refetch data here
+  };
+
+  // Handle key press event for search
+  const handleSearchKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleSearch(); // Trigger search on Enter key press
+    }
+  };
+
+  // Handle change in search input
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value); // Update search text
   };
 
   return (
-    <div className="flex max-w-7xl mx-auto pt-28">
-      {/* Left Sidebar: Filters */}
-      <div className="w-1/4 p-4">
-      <h1 className="text-3xl text-secondary my-10">Filter</h1>
-        <div className="space-y-4">
-          {/* Capacity Dropdown */}
-          <div>
-            <button
-              onClick={toggleCapacity}
-              className="flex justify-between w-full text-left"
-            >
-              <span>Capacity</span>
-              <RiArrowDropDownLine
-                className={`w-5 h-5 ${
-                  isCapacityOpen ? "transform rotate-180" : ""
-                }`}
-              />
-            </button>
-            {isCapacityOpen && (
-              <Slider
-                value={capacityRange}
-                min={0}
-                max={100}
-                onChange={handleCapacityChange}
-                valueLabelDisplay="auto"
-                aria-labelledby="capacity-slider"
-              />
-            )}
-          </div>
+    <div className="pt-28 bg-white dark:bg-darkBg">
+      <div className="md:flex max-w-7xl mx-auto">
+        {/* Left Sidebar: Filters */}
+        <div className="md:w-1/4 w-full p-4 dark:text-white">
+          <h1 className="text-3xl text-secondary mb-6 dark:text-white">
+            Filter
+          </h1>
+          <div className="space-y-4">
+            {/* Capacity Filter */}
+            <div>
+              <div
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => setIsCapacityOpen(!isCapacityOpen)}
+              >
+                <h1 className="mb-2 text-lg ">Room Capacity</h1>
+                <RiArrowDropDownLine className="text-3xl" />
+              </div>
+              {isCapacityOpen && (
+                <div className="w-[95%] mx-auto space-y-3">
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="capacity"
+                        value="1-5"
+                        checked={
+                          capacityRange[0] === 1 && capacityRange[1] === 5
+                        }
+                        onChange={handleCapacityChange}
+                      />
+                      <span className="ms-2">Capacity 5 people</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="capacity"
+                        value="5-10"
+                        checked={
+                          capacityRange[0] === 5 && capacityRange[1] === 10
+                        }
+                        onChange={handleCapacityChange}
+                      />
+                      <span className="ms-2">Capacity 10 people</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="capacity"
+                        value="10-15"
+                        checked={
+                          capacityRange[0] === 10 && capacityRange[1] === 15
+                        }
+                        onChange={handleCapacityChange}
+                      />
+                      <span className="ms-2">Capacity 15 people</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="capacity"
+                        value="15-20"
+                        checked={
+                          capacityRange[0] === 15 && capacityRange[1] === 20
+                        }
+                        onChange={handleCapacityChange}
+                      />
+                      <span className="ms-2">Capacity 20 people</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="capacity"
+                        value="20-25"
+                        checked={
+                          capacityRange[0] === 20 && capacityRange[1] === 25
+                        }
+                        onChange={handleCapacityChange}
+                      />
+                      <span className="ms-2">Capacity 25 people</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
 
-          {/* Price Dropdown */}
-          <div>
-            <button
-              onClick={togglePrice}
-              className="flex justify-between w-full text-left"
-            >
-              <span>Price</span>
-              <RiArrowDropDownLine
-                className={`w-5 h-5 ${
-                  isPriceOpen ? "transform rotate-180" : ""
-                }`}
-              />
-            </button>
-            {isPriceOpen && (
-              <div className="mt-2">
+            {/* Price Filter */}
+            <div className="border-t-2 pt-5">
+              <h3>Price</h3>
+              <div className="w-[95%] mx-auto">
                 <Slider
                   value={priceRange}
                   min={0}
-                  max={90}
+                  max={10}
+                  step={1} // Steps of 1, so you get 10 divisions
                   onChange={handlePriceChange}
-                  valueLabelDisplay="auto"
-                  aria-labelledby="price-slider"
+                  valueLabelDisplay="off" // Hide default labels
                 />
                 <div className="flex justify-between">
-                  <span>{priceRange[0]}</span>
-                  <span>{priceRange[1]}</span>
+                  {/* Labels below slider corresponding to divisions */}
+                  {[...Array(11).keys()].map((i) => (
+                    <span key={i}>{i}</span>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-3">
+                  <span>{actualPrice[0]}</span>
+                  <span>{actualPrice[1]}</span>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* Clear Filters Button */}
-          <div onClick={clearFilters}>
-            <CustomButton2 name="Clear Filter" />
-          </div>
-        </div>
-      </div>
-
-      {/* Right Content: Products, Sort By, and Search */}
-      <div className="w-3/4 p-4">
-        <div className="flex justify-between mb-4 items-center">
-          {/* Search Bar */}
-          <input
-            type="text"
-            placeholder="Search rooms..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="border rounded-lg w-3/4 py-2 border-primary px-4 focus:ring-red-500 focus:border-red-500"
-          />
-
-          {/* Sort By Dropdown */}
-          <div>
-            <label className=" text-secondary">Sort by:</label>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="cursor-pointer"
-            >
-              <option value="featured">Featured</option>
-              <option value="low-to-high">Price: Low to High</option>
-              <option value="high-to-low">Price: High to Low</option>
-            </select>
+            {/* Clear Filters Button */}
+            <div onClick={clearFilters}>
+              <CustomButton2 name="Clear Filter" />
+            </div>
           </div>
         </div>
 
-        {/* Room Listings */}
-        {isLoading ? (
-          <p>Loading rooms...</p>
-        ) : (
-          <div className="grid grid-cols-3 gap-6">
-            {rooms?.data.map((room) => (
+        {/* Right Content: Products, Sort By, and Search */}
+        <div className="md:w-3/4 w-full p-4">
+          <div className="md:flex gap-5 md:space-y-0 space-y-3 justify-between mb-4 items-center">
+            <div className="relative w-full md:w-3/4">
+              <input
+                type="text"
+                placeholder="Search rooms..."
+                value={searchText}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyPress} // Add event handler for Enter key press
+                className="border rounded-lg w-full py-2 dark:bg-secondary border-primary dark:border-secondary px-4 pr-16 focus:ring-blue-600 focus:border-blue-600"
+              />
+              <button
+                onClick={handleSearch}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1 bg-primary text-white rounded-md"
+              >
+                Search
+              </button>
+            </div>
+
+            {/* Sort By Dropdown */}
+            <div className="relative">
+              <div
+                className="cursor-pointer dark:text-white"
+                onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+              >
+                <label className="mr-2 cursor-pointer">Sort by:</label>
+                <span className="font-bold">{sortBy}</span>{" "}
+              </div>
+              <div className="flex relative">
+                {isSortDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkBg shadow-lg z-10">
+                    <div
+                      className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSortByChange("Default")}
+                    >
+                      Default
+                    </div>
+                    <div
+                      className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSortByChange("Price - Low to High")}
+                    >
+                      Price: Low to High
+                    </div>
+                    <div
+                      className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSortByChange("Price - High to Low")}
+                    >
+                      Price: High to Low
+                    </div>
+                    <div
+                      className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSortByChange("new to old")}
+                    >
+                      Date, New to Old
+                    </div>
+                    <div
+                      className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleSortByChange("old to new")}
+                    >
+                      Date, Old to New
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Product Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {rooms?.map((room) => (
               <CustomCard
-                id={room?._id}
-                key={room.roomNo} // Assuming roomNo as the unique key
-                images={room.images} // Using dynamic room images array
-                roomName={room.name} // Dynamic room name
+                key={room._id}
+                id={room._id}
+                images={room.images}
+                roomName={room.name}
                 capacity={`Capacity: ${room.capacity} People`} // Dynamic capacity
-                price={`$${room.pricePerSlot} / per slot`} 
+                price={`$${room.pricePerSlot} / per slot`} // Dynamic price per slot
               />
             ))}
           </div>
-        )}
+
+          {/* Pagination Controls */}
+          {/* <div className="flex justify-between items-center mt-6">
+            <button
+              className="bg-red-500 text-white p-2 rounded"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              &lt; Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="bg-red-500 text-white p-2 rounded"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next &gt;
+            </button>
+          </div> */}
+        </div>
       </div>
     </div>
   );

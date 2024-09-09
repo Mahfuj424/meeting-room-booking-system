@@ -14,7 +14,7 @@ const RoomDetails = () => {
   const id = pathName.split("/")[2];
 
   // Fetch all rooms
-  const { data, isLoading } = useGetAllRoomsQuery(undefined);
+  const { data, isLoading } = useGetAllRoomsQuery({sortby:'Default'});
   const rooms = data?.data;
 
   // Find the specific room based on ID
