@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
 import { baseApi } from "./api/baseApi";
+import slotReducer from "./features/slotSlice/slotSlice";
 import {
   persistStore,
   persistReducer,
@@ -24,6 +25,7 @@ export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer, // Add baseApi reducer
     auth: persistAuthReducer,
+    slot: slotReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

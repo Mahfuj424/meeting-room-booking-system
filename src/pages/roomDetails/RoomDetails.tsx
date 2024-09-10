@@ -3,18 +3,16 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useGetAllRoomsQuery } from "../../redux/features/room/roomApi";
-import { ScrollRestoration, useLocation } from "react-router-dom";
+import { Link, ScrollRestoration, useParams } from "react-router-dom";
 import "./styles.css";
 import CustomButton2 from "../../components/customButton/CustomButton";
-import BounceLoader  from 'react-spinners/BounceLoader';
+import PulseLoader from "react-spinners/PulseLoader";
 
 const RoomDetails = () => {
-  const location = useLocation();
-  const pathName = location.pathname;
-  const id = pathName.split("/")[2];
+  const { id } = useParams();
 
   // Fetch all rooms
-  const { data, isLoading } = useGetAllRoomsQuery({sortby:'Default'});
+  const { data, isLoading } = useGetAllRoomsQuery({ sortby: "Default" });
   const rooms = data?.data;
 
   // Find the specific room based on ID
@@ -23,10 +21,12 @@ const RoomDetails = () => {
 
   return (
     <>
-     <ScrollRestoration />
+      <ScrollRestoration />
       {isLoading ? (
         <div className="flex justify-center items-center">
-          <BounceLoader className="text-primary" />
+          <div className="flex items-center justify-center h-80">
+            <PulseLoader color="#1586FD" />
+          </div>
         </div>
       ) : (
         <div className="max-w-7xl mx-auto px-4 py-24">
@@ -49,7 +49,7 @@ const RoomDetails = () => {
                       <img
                         src={image}
                         alt={`Slide ${index + 1}`}
-                        style={{ height: "100%", borderRadius: "10px", }}
+                        style={{ height: "100%", borderRadius: "10px" }}
                       />
                     </SwiperSlide>
                   ))}
@@ -145,7 +145,12 @@ const RoomDetails = () => {
             </div>
           </div>
           <div className="text-center">
-            <CustomButton2 name="Book Now" />
+            <Link
+              to={`/booking-process/${singleRoom?._id}`}
+              state={{ room: singleRoom }} // Pass the object as state
+            >
+              <CustomButton2 name="Book Now" />
+            </Link>
           </div>
         </div>
       )}

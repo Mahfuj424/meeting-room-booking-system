@@ -4,7 +4,7 @@ const roomApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSlot: builder.query({
       query: () => ({
-        url: "/slots/availability",
+        url: "/slots",
         method: "GET",
       }),
       providesTags: ["Room"], // Add providesTags for automatic refetch

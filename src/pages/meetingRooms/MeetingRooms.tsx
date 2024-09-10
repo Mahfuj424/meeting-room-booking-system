@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import CustomButton2 from "../../components/customButton/CustomButton";
 import { useGetAllRoomsQuery } from "../../redux/features/room/roomApi";
 import CustomCard from "../../components/customCard/CustomCard";
 import Slider from "@mui/material/Slider"; // Assuming you use Material UI for sliders
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { CiFilter } from "react-icons/ci";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const FilterPanel: React.FC = () => {
   const [priceRange, setPriceRange] = useState([0, 90]);
@@ -13,7 +16,7 @@ const FilterPanel: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("Default"); // Sort by state
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Toggle sort dropdown
-  const [isCapacityOpen, setIsCapacityOpen] = useState(false);
+  const [isCapacityOpen, setIsCapacityOpen] = useState(true);
 
   // Fetch room data
   const { data, isLoading } = useGetAllRoomsQuery({
@@ -37,7 +40,7 @@ const FilterPanel: React.FC = () => {
 
   useEffect(() => {
     // Assume maxPrice is fetched from data dynamically, set the maxPrice
-    const fetchedMaxPrice = 300; // Example maximum price
+    const fetchedMaxPrice = 200; // Example maximum price
     setMaxPrice(fetchedMaxPrice);
     setActualPrice([0, fetchedMaxPrice]); // Set actual price range
   }, []);
@@ -63,24 +66,15 @@ const FilterPanel: React.FC = () => {
     setIsSortDropdownOpen(false); // Close dropdown after selection
   };
 
-  // Handle search function
-  const handleSearch = () => {
-    console.log("Searching for:", searchText);
+
+
+
+  const handleSearchRoom = (e: any) => {
+    e.preventDefault();
+    const form = e.target;
+    const searchText = form.search.value;
+    setSearchText(searchText)
     // Perform search or refetch data here
-  };
-
-  // Handle key press event for search
-  const handleSearchKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.key === "Enter") {
-      handleSearch(); // Trigger search on Enter key press
-    }
-  };
-
-  // Handle change in search input
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value); // Update search text
   };
 
   return (
@@ -88,8 +82,8 @@ const FilterPanel: React.FC = () => {
       <div className="md:flex max-w-7xl mx-auto">
         {/* Left Sidebar: Filters */}
         <div className="md:w-1/4 w-full p-4 dark:text-white">
-          <h1 className="text-3xl text-secondary mb-6 dark:text-white">
-            Filter
+          <h1 className="text-3xl flex items-center gap-4 text-secondary mb-6 dark:text-white">
+            Filter <CiFilter className="text-primary" />
           </h1>
           <div className="space-y-4">
             {/* Capacity Filter */}
@@ -108,13 +102,13 @@ const FilterPanel: React.FC = () => {
                       <input
                         type="radio"
                         name="capacity"
-                        value="1-5"
+                        value="1-10"
                         checked={
-                          capacityRange[0] === 1 && capacityRange[1] === 5
+                          capacityRange[0] === 1 && capacityRange[1] === 10
                         }
                         onChange={handleCapacityChange}
                       />
-                      <span className="ms-2">Capacity 5 people</span>
+                      <span className="ms-2">Capacity 1-10 people</span>
                     </label>
                   </div>
                   <div>
@@ -122,13 +116,13 @@ const FilterPanel: React.FC = () => {
                       <input
                         type="radio"
                         name="capacity"
-                        value="5-10"
+                        value="10-20"
                         checked={
-                          capacityRange[0] === 5 && capacityRange[1] === 10
+                          capacityRange[0] === 10 && capacityRange[1] === 20
                         }
                         onChange={handleCapacityChange}
                       />
-                      <span className="ms-2">Capacity 10 people</span>
+                      <span className="ms-2">Capacity 1-20 people</span>
                     </label>
                   </div>
                   <div>
@@ -136,13 +130,13 @@ const FilterPanel: React.FC = () => {
                       <input
                         type="radio"
                         name="capacity"
-                        value="10-15"
+                        value="20-30"
                         checked={
-                          capacityRange[0] === 10 && capacityRange[1] === 15
+                          capacityRange[0] === 20 && capacityRange[1] === 30
                         }
                         onChange={handleCapacityChange}
                       />
-                      <span className="ms-2">Capacity 15 people</span>
+                      <span className="ms-2">Capacity 1-30 people</span>
                     </label>
                   </div>
                   <div>
@@ -150,13 +144,13 @@ const FilterPanel: React.FC = () => {
                       <input
                         type="radio"
                         name="capacity"
-                        value="15-20"
+                        value="30-40"
                         checked={
-                          capacityRange[0] === 15 && capacityRange[1] === 20
+                          capacityRange[0] === 30 && capacityRange[1] === 40
                         }
                         onChange={handleCapacityChange}
                       />
-                      <span className="ms-2">Capacity 20 people</span>
+                      <span className="ms-2">Capacity 1-40 people</span>
                     </label>
                   </div>
                   <div>
@@ -164,13 +158,13 @@ const FilterPanel: React.FC = () => {
                       <input
                         type="radio"
                         name="capacity"
-                        value="20-25"
+                        value="40-50"
                         checked={
-                          capacityRange[0] === 20 && capacityRange[1] === 25
+                          capacityRange[0] === 40 && capacityRange[1] === 50
                         }
                         onChange={handleCapacityChange}
                       />
-                      <span className="ms-2">Capacity 25 people</span>
+                      <span className="ms-2">Capacity 1-50 people</span>
                     </label>
                   </div>
                 </div>
@@ -213,20 +207,23 @@ const FilterPanel: React.FC = () => {
         <div className="md:w-3/4 w-full p-4">
           <div className="md:flex gap-5 md:space-y-0 space-y-3 justify-between mb-4 items-center">
             <div className="relative w-full md:w-3/4">
-              <input
-                type="text"
-                placeholder="Search rooms..."
-                value={searchText}
-                onChange={handleSearchChange}
-                onKeyDown={handleSearchKeyPress} // Add event handler for Enter key press
-                className="border rounded-lg w-full py-2 dark:bg-secondary border-primary dark:border-secondary px-4 pr-16 focus:ring-blue-600 focus:border-blue-600"
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1 bg-primary text-white rounded-md"
-              >
-                Search
-              </button>
+              <form onSubmit={handleSearchRoom}>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Search rooms..."
+                  // value={searchText}
+                  // onChange={handleSearchChange}
+                  // onKeyDown={handleSearchKeyPress} // Add event handler for Enter key press
+                  className="border rounded-lg w-full py-2 dark:bg-secondary border-primary dark:border-secondary px-4 pr-16 focus:ring-blue-600 focus:border-blue-600"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1 bg-primary text-white rounded-md"
+                >
+                  Search
+                </button>
+              </form>
             </div>
 
             {/* Sort By Dropdown */}
@@ -278,18 +275,24 @@ const FilterPanel: React.FC = () => {
           </div>
 
           {/* Product Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rooms?.map((room) => (
-              <CustomCard
-                key={room._id}
-                id={room._id}
-                images={room.images}
-                roomName={room.name}
-                capacity={`Capacity: ${room.capacity} People`} // Dynamic capacity
-                price={`$${room.pricePerSlot} / per slot`} // Dynamic price per slot
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center h-80">
+              <PulseLoader color="#1586FD" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {rooms?.map((room) => (
+                <CustomCard
+                  key={room._id}
+                  id={room._id}
+                  images={room.images}
+                  roomName={room.name}
+                  capacity={`Capacity: ${room.capacity} People`} // Dynamic capacity
+                  price={`$${room.pricePerSlot} / per slot`} // Dynamic price per slot
+                />
+              ))}
+            </div>
+          )}
 
           {/* Pagination Controls */}
           {/* <div className="flex justify-between items-center mt-6">

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { BiLoaderCircle } from "react-icons/bi";
 
 const CreateSlot: React.FC = () => {
-  const { data } = useGetAllRoomsQuery(undefined);
+  const { data } = useGetAllRoomsQuery({ sortby: "Default" });
   const roomData = data?.data || [];
   const [createSlot, { isLoading }] = useCreateSlotMutation();
 
@@ -19,6 +19,7 @@ const CreateSlot: React.FC = () => {
     e.preventDefault();
 
     const room = roomData.find((room) => room.name === selectedRoom);
+    console.log(room?._id);
 
     if (room) {
       const slotInfo = {

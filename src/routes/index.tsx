@@ -12,6 +12,9 @@ import CreateSlot from "../pages/dashboard/D-component/admin/slot/CreateSlots";
 import SlotsList from "../pages/dashboard/D-component/admin/slot/SlotsList";
 import Booking from "../pages/dashboard/D-component/user/BookingList";
 import RoomDetails from "../pages/roomDetails/RoomDetails";
+import BookingProcess from "../pages/bookingProcess/BookingProcess";
+import Checkout from "../pages/checkout/Checkout";
+import BookingSummary from "../pages/bookingSummary/BookingSummary";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +40,18 @@ const router = createBrowserRouter([
       {
         path: "/about-us",
         element: <AboutUs />,
+      },
+      {
+        path: "/booking-process/:id",
+        element: <BookingProcess />,
+      },
+      {
+        path: "/booking-summary",
+        element: <BookingSummary slot={undefined} />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
       },
     ],
   },

@@ -10,7 +10,7 @@ const roomApi = baseApi.injectEndpoints({
         maxPrice,
         sortBy,
         page = 1,
-        limit =6,
+        limit = 6,
       }) => ({
         url: "/rooms",
         method: "GET",
@@ -24,7 +24,14 @@ const roomApi = baseApi.injectEndpoints({
           limit,
         },
       }),
-      providesTags: ["Room"], // Add providesTags for automatic refetch
+      providesTags: ["Room"],
+    }),
+    getSingleRoom: builder.query({
+      query: (id: string) => ({
+        url: `/rooms/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Room", id }],
     }),
     createRoom: builder.mutation({
       query: (roomInfo) => ({
@@ -32,7 +39,7 @@ const roomApi = baseApi.injectEndpoints({
         method: "POST",
         body: roomInfo,
       }),
-      invalidatesTags: ["Room"], // Invalidate tags for automatic refetch
+      invalidatesTags: ["Room"],
     }),
     updateRoom: builder.mutation({
       query: ({ id, ...roomInfo }) => ({
@@ -40,20 +47,21 @@ const roomApi = baseApi.injectEndpoints({
         method: "PUT",
         body: roomInfo,
       }),
-      invalidatesTags: ["Room"], // Invalidate tags for automatic refetch
+      invalidatesTags: ["Room"],
     }),
     deleteRoom: builder.mutation({
-      query: (id) => ({
+      query: (id: string) => ({
         url: `/rooms/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Room"], // Invalidate tags for automatic refetch
+      invalidatesTags: ["Room"],
     }),
   }),
 });
 
 export const {
   useGetAllRoomsQuery,
+  useGetSingleRoomQuery, // Add this for single room fetching
   useCreateRoomMutation,
   useUpdateRoomMutation,
   useDeleteRoomMutation,
