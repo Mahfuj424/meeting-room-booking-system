@@ -22,32 +22,15 @@ const slotSlice = createSlice({
   name: "slot",
   initialState,
   reducers: {
-    // Add a new slot to the state
-    addSlot: (state, action: PayloadAction<Slot>) => {
-      const newSlot = action.payload;
-      state.slots.push(newSlot);
-    },
-
-    // Update an existing slot
-    updateSlot: (state, action: PayloadAction<Slot>) => {
-      const updatedSlot = action.payload;
-      const index = state.slots.findIndex(
-        (slot) => slot._id === updatedSlot._id
-      );
-      if (index !== -1) {
-        state.slots[index] = updatedSlot;
-      }
-    },
-
-    // Remove a slot from the state
-    removeSlot: (state, action: PayloadAction<string>) => {
-      state.slots = state.slots.filter((slot) => slot._id !== action.payload);
+    // Add a new array of slots to the state (replace existing slots)
+    addSlot: (state, action: PayloadAction<Slot[]>) => {
+      state.slots = action.payload; // Directly set the new array of slots
     },
   },
 });
 
 // Export actions to use in components
-export const { addSlot, updateSlot, removeSlot } = slotSlice.actions;
+export const { addSlot } = slotSlice.actions;
 
 // Selector to get all slots
 export const selectSlots = (state: { slot: SlotState }) => state.slot?.slots;

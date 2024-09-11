@@ -112,6 +112,7 @@ const BookingProcess: React.FC = () => {
       ...slot,
       user: user, // Optionally add user data if required
     }));
+    console.log(mappedSlots);
 
     // Dispatch the updated slots array to the Redux store
     if (mappedSlots.length > 0) {
