@@ -115,7 +115,7 @@ const DashboardLayout: React.FC = () => {
                 {openSection === "booking" && sidebarOpen && (
                   <ul className="space-y-2 ml-6 mt-2">
                     <li>
-                      <Link className="flex items-center" to="my-bookings">
+                      <Link className="flex items-center" to="bookings">
                         <BsCalendar2Check className="mr-2" /> Booking
                       </Link>
                     </li>

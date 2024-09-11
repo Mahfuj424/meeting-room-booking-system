@@ -9,7 +9,7 @@ import { BsMoonStarsFill } from "react-icons/bs";
 import { LuLogOut } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppSelector } from "../../redux/hook"
+import { useAppSelector } from "../../redux/hook";
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -96,19 +96,32 @@ const Navbar = () => {
           </div>
           {userMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkBg shadow-lg rounded-lg">
-              {user && (
+              {user?.role === "admin" && (
                 <div>
-                  <Link
-                    to="/my-booking"
-                    className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    My Booking
-                  </Link>
                   <Link
                     to="/dashboard"
                     className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Dashboard
+                  </Link>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => dispatch(logout)}
+                  >
+                    <div className="flex gap-1 items-center">
+                      <LuLogOut />
+                      <h1>Logout</h1>
+                    </div>
+                  </button>
+                </div>
+              )}
+              {user?.role === "user" && (
+                <div>
+                  <Link
+                    to="/my-bookings"
+                    className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    My Booking
                   </Link>
                   <button
                     className="block w-full text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"

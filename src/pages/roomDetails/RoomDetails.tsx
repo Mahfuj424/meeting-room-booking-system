@@ -7,9 +7,12 @@ import { Link, ScrollRestoration, useParams } from "react-router-dom";
 import "./styles.css";
 import CustomButton2 from "../../components/customButton/CustomButton";
 import PulseLoader from "react-spinners/PulseLoader";
+import { useAppSelector } from "../../redux/hook";
+import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 
 const RoomDetails = () => {
   const { id } = useParams();
+  const user = useAppSelector(selectCurrentUser)
 
   // Fetch all rooms
   const { data, isLoading } = useGetAllRoomsQuery({ sortby: "Default" });
@@ -17,7 +20,6 @@ const RoomDetails = () => {
 
   // Find the specific room based on ID
   const singleRoom = rooms?.find((room) => room?._id === id);
-  console.log(singleRoom);
 
   return (
     <>
@@ -144,7 +146,7 @@ const RoomDetails = () => {
               </div>
             </div>
           </div>
-          <div className="text-center">
+          <div className={`text-center ${user?.role === 'user' ? 'block' : 'hidden'}`}>
             <Link
               to={`/booking-process/${singleRoom?._id}`}
               state={{ room: singleRoom }} // Pass the object as state

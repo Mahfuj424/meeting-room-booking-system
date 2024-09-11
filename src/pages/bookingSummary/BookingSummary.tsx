@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppSelector } from "../../redux/hook";
 import { selectSlots } from "../../redux/features/slotSlice/slotSlice";
 import CustomButton2 from "../../components/customButton/CustomButton";
 import { useState } from "react";
+import { useCreateBookingMutation } from "../../redux/features/booking/bookingApi";
 
 const formatDate = (isoDate: string) => {
   const date = new Date(isoDate);
@@ -43,9 +42,9 @@ const calculateDurationInHours = (
 };
 
 const BookingSummary = () => {
-  const user = useAppSelector(selectCurrentUser);
   const slots = useSelector(selectSlots);
   const [showButton, setShowButton] = useState(false);
+  const [createBooking, { data }] = useCreateBookingMutation();
 
   const handleShow = () => {
     setShowButton(true);
@@ -57,6 +56,8 @@ const BookingSummary = () => {
 
   // Assuming all slots have the same room name and date
   const roomName = slots[0]?.room?.name;
+  const roomId = slots[0]?.room?._id;
+  const user = slots[0]?.user;
   const pricePerSlot = slots[0]?.room?.pricePerSlot;
   const formattedDate = formatDate(slots[0]?.date);
 
@@ -79,6 +80,25 @@ const BookingSummary = () => {
   const totalPrice = slots?.reduce((total, slotItem) => {
     return total + (slotItem?.room?.pricePerSlot || 0);
   }, 0);
+
+  const slotId = slots.map((slot) => slot?._id);
+
+  const handleBooking = async () => {
+    const bookingData = {
+      date: formattedDate,
+      slots: slotId,
+      room: roomId,
+      user: user?._id,
+    };
+    console.log(bookingData);
+    const res = await createBooking(bookingData);
+    console.log(res);
+    try {
+      window.location.href = res?.data?.data?.payment_url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="py-24">
@@ -137,6 +157,7 @@ const BookingSummary = () => {
             <h1 className="font-semibold text-secondary">
               <span className="text-lg">Total Cost:</span> ${totalPrice}
             </h1>
+
             <div onClick={handleShow}>
               <CustomButton2 name="Proced to Checkout" />
             </div>
@@ -145,7 +166,7 @@ const BookingSummary = () => {
                 <button className="text-white bg-[#635BFF] px-3 py-1 rounded-full">
                   Stripe
                 </button>
-                <button className="text-white bg-[#FE9900] px-3 py-1 rounded-full">
+                <button onClick={handleBooking} className="text-white bg-[#FE9900] px-3 py-1 rounded-full">
                   AamarPay
                 </button>
                 <button className="text-white bg-[#e2136e] px-3 py-1 rounded-full">

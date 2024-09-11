@@ -15,6 +15,8 @@ import RoomDetails from "../pages/roomDetails/RoomDetails";
 import BookingProcess from "../pages/bookingProcess/BookingProcess";
 import Checkout from "../pages/checkout/Checkout";
 import BookingSummary from "../pages/bookingSummary/BookingSummary";
+import PaymentSucces from "../pages/payment/PaymentSucces";
+import MyBooking from "../pages/myBooking/MyBooking";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
         element: <BookingProcess />,
       },
       {
+        path: "/my-bookings",
+        element: <MyBooking />,
+      },
+      {
         path: "/booking-summary",
         element: <BookingSummary slot={undefined} />,
       },
@@ -58,6 +64,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <AuthPage />,
+  },
+  {
+    path: "/succes",
+    element: <PaymentSucces />,
   },
   {
     path: "dashboard",
@@ -80,7 +90,7 @@ const router = createBrowserRouter([
         element: <SlotsList />,
       },
       {
-        path: "my-bookings",
+        path: "bookings",
         element: <Booking />,
       },
     ],

@@ -89,7 +89,7 @@ const AuthPage: React.FC = () => {
           password: data.password!,
           address: data.address,
           phone: data.phoneNumber,
-          role: "admin",
+          role: "user",
           image: imageUrl,
         };
 
@@ -98,7 +98,7 @@ const AuthPage: React.FC = () => {
         console.log("res data", res);
         toast.success("User signed up successfully", { id: toastId });
         setIsLogin(true);
-        navigate('/')
+        navigate("/auth");
       }
     } catch (error) {
       console.error("Error during signup/login:", error);
@@ -231,29 +231,56 @@ const AuthPage: React.FC = () => {
           <div className="bg-white dark:bg-darkCard p-6 rounded-lg shadow-lg w-96">
             <h3 className="text-lg font-bold mb-4">Credentials</h3>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">User</label>
+              <label className="block font-medium mb-1">User</label>
               <div className="flex items-center">
                 <input
                   type="text"
-                  value="mahfuji@gmail.com"
+                  value="mahfujahmad400@gmail.com"
                   readOnly
                   className="border border-gray-300 dark:border-gray-600 dark:bg-darkBg dark:text-white p-2 rounded w-full mr-2"
                 />
                 <AiOutlineCopy
                   className="cursor-pointer -ms-8"
-                  onClick={() => handleCopy("mahfuji@gmail.com")}
+                  onClick={() => handleCopy("mahfujahmad400@gmail.com")}
                 />
               </div>
               <div className="flex items-center mt-2">
                 <input
                   type="text"
-                  value="password"
+                  value="123456"
                   readOnly
                   className="border border-gray-300 dark:border-gray-600 dark:bg-darkBg dark:text-white p-2 rounded w-full mr-2"
                 />
                 <AiOutlineCopy
                   className="cursor-pointer -ms-8"
-                  onClick={() => handleCopy("password")}
+                  onClick={() => handleCopy("123456")}
+                />
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block  font-medium mb-1">Admin</label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  value="mahfujahmad424@gmail.com"
+                  readOnly
+                  className="border border-gray-300 dark:border-gray-600 dark:bg-darkBg dark:text-white p-2 rounded w-full mr-2"
+                />
+                <AiOutlineCopy
+                  className="cursor-pointer -ms-8"
+                  onClick={() => handleCopy("mahfujahmad424@gmail.com")}
+                />
+              </div>
+              <div className="flex items-center mt-2">
+                <input
+                  type="text"
+                  value="123456"
+                  readOnly
+                  className="border border-gray-300 dark:border-gray-600 dark:bg-darkBg dark:text-white p-2 rounded w-full mr-2"
+                />
+                <AiOutlineCopy
+                  className="cursor-pointer -ms-8"
+                  onClick={() => handleCopy("123456")}
                 />
               </div>
             </div>

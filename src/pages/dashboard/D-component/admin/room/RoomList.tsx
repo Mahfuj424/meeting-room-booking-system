@@ -13,7 +13,7 @@ type TRoom = {
 };
 
 const RoomList: React.FC = () => {
-  const { data, isLoading } = useGetAllRoomsQuery(undefined);
+  const { data, isLoading } = useGetAllRoomsQuery({sortby:'new to old'});
   const roomData = data?.data;
 
   return (

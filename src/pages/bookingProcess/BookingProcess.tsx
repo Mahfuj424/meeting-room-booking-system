@@ -165,9 +165,6 @@ const BookingProcess: React.FC = () => {
                     defaultValue={user?.[field]}
                     id={`demo-helper-text-misaligned-${field}`}
                     label={field}
-                    InputProps={{
-                      readOnly: true,
-                    }}
                   />
                 </p>
               ))}
