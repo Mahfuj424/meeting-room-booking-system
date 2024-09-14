@@ -15,6 +15,7 @@ type TRoom = {
 const RoomList: React.FC = () => {
   const { data, isLoading } = useGetAllRoomsQuery({sortby:'new to old'});
   const roomData = data?.data;
+  console.log(roomData);
 
   return (
     <div className="overflow-x-auto mx-auto">
@@ -37,8 +38,8 @@ const RoomList: React.FC = () => {
         </thead>
         <tbody>
           {isLoading ? (
-            <div className="text-primary flex h-screen justify-center mt-10">
-              <SyncLoader />
+            <div className=" flex h-screen justify-center mt-10">
+              <SyncLoader color="#1586FD" />
             </div>
           ) : (
             roomData?.map((room: TRoom) => (

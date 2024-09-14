@@ -19,22 +19,22 @@ const HotelCard: React.FC<Props> = () => {
             <img
               src="https://point.moxcreative.com/ophelia/wp-content/uploads/sites/31/2022/06/cozy-hotel-room-interior.jpg" // Replace with your image path or use a public URL
               alt="Hotel Room"
-              className="w-40 h-28 rounded-md"
+              className="w-40 h-28 rounded-md md:block hidden"
             />
           </div>
         </div>
 
-        <div className="lg:w-1/2 lg:pl-8 mt-6 lg:mt-0 text-darkBg dark:text-white">
+        <div className="lg:w-1/2 lg:pl-8 mt-6 lg:mt-0 text-secondary dark:text-gray-300">
           <h2 className="text-3xl font-semibold mb-4">
-            Enjoy unforgettable experiences in our hotels
+            Enjoy unforgettable experiences in our Rooms
           </h2>
-          <p className="text-secondary mb-4">
+          <p className="text-secondary dark:text-gray-300 mb-4">
             Risus consequat donec vel mi diam lobortis maximus laoreet nisi.
             Fames torquent neque duis pharetra urna per facilisis nunc cras
             blandit. Fermentum vitae mus neque metus quisque conubia elementum
             habitant nisi at.
           </p>
-          <p className="text-secondary">
+          <p className="text-secondary dark:text-gray-300">
             Sapien himenaeos sollicitudin habitant hac. Lacinia ridiculus
             volutpat nisl nascetur curae ad taciti per sapien dolor. Eu posuere
             congue himenaeos luctus sagittis turpis senectus purus.
@@ -42,8 +42,8 @@ const HotelCard: React.FC<Props> = () => {
           <div className="mt-6 flex items-center">
             <FiPhone className="text-primary mr-2" size={24} />
             <div>
-              <h3 className="text-lg font-semibold">Reservation</h3>
-              <p className="text-secondary">+6221-2002-2012</p>
+              <h3 className="text-lg font-semibold dark:text-gray-300">Reservation</h3>
+              <p className="text-secondary dark:text-gray-300">+6221-2002-2012</p>
             </div>
           </div>
         </div>

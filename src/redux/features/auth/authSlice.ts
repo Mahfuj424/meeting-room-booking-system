@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RootState } from "../../store";
 import { createSlice } from "@reduxjs/toolkit";
 
 type TAuthState = {
-  user: null | object;
-  token: null | string;
+  user: null | object | any;
+  token: null | string | any;
 };
 
 const initialState: TAuthState = {

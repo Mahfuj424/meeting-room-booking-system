@@ -1,4 +1,5 @@
-const MyBookingList = ({ room }) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const MyBookingList = ({ room }:any) => {
   const slots = room?.slots || [];
   const firstStartTime = slots.length > 0 ? slots[0]?.startTime : "N/A";
   const lastEndTime =
@@ -27,6 +28,8 @@ const MyBookingList = ({ room }) => {
             ? "text-red-500"
             : room?.isConfirmed === "confirmed"
             ? "text-green-500"
+            : room?.isConfirmed === "Time-Expired!"
+            ? "text-red-600"
             : ""
         }`}
       >

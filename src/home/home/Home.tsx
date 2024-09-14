@@ -1,3 +1,4 @@
+import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Banner from "../banner/Banner";
 import BookingSteps from "../bookingSteps/BookingSteps";
 import FeaturedRoom from "../featuredRoom/FeaturedRoom";
@@ -11,10 +12,11 @@ const Home = () => {
       <Banner />
       <div className="py-20">
         <ServiceSection />
-        <FeaturedRoom/>
+        <FeaturedRoom />
         <WhyChooseUs />
         <BookingSteps />
         <Testimonial />
+        <ScrollToTopButton />
       </div>
     </div>
   );

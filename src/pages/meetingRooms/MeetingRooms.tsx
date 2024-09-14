@@ -21,7 +21,7 @@ const FilterPanel: React.FC = () => {
   // Fetch room data
   const { data, isLoading } = useGetAllRoomsQuery({
     search: searchText,
-    capacity: capacityRange[1],
+    capacity: capacityRange[0],
     minPrice: actualPrice[0],
     maxPrice: actualPrice[1],
     sortBy: sortBy, // Pass the sort by value
@@ -45,7 +45,7 @@ const FilterPanel: React.FC = () => {
     setActualPrice([0, fetchedMaxPrice]); // Set actual price range
   }, []);
 
-  const handlePriceChange = (event: Event, newValue: number | number[]) => {
+  const handlePriceChange = (_event: Event, newValue: number | number[]) => {
     // newValue corresponds to a number between 0 and 10 (the slider range)
     const minPrice = Math.floor((newValue as number[])[0] * (maxPrice / 10));
     const maxPriceValue = Math.floor(
@@ -65,9 +65,6 @@ const FilterPanel: React.FC = () => {
     setSortBy(value);
     setIsSortDropdownOpen(false); // Close dropdown after selection
   };
-
-
-
 
   const handleSearchRoom = (e: any) => {
     e.preventDefault();
@@ -212,10 +209,7 @@ const FilterPanel: React.FC = () => {
                   type="text"
                   name="search"
                   placeholder="Search rooms..."
-                  // value={searchText}
-                  // onChange={handleSearchChange}
-                  // onKeyDown={handleSearchKeyPress} // Add event handler for Enter key press
-                  className="border rounded-lg w-full py-2 dark:bg-secondary border-primary dark:border-secondary px-4 pr-16 focus:ring-blue-600 focus:border-blue-600"
+                  className="border rounded-lg w-full py-2 outline-none dark:text-white dark:bg-gray-800  border-primary dark:border-secondary px-4 pr-16 focus:ring-blue-600 focus:border-blue-600"
                 />
                 <button
                   type="submit"
@@ -281,7 +275,7 @@ const FilterPanel: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {rooms?.map((room) => (
+              {rooms?.map((room:any) => (
                 <CustomCard
                   key={room._id}
                   id={room._id}

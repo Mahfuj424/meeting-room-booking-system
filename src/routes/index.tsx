@@ -1,4 +1,5 @@
-import MeetingRooms from "../pages/meetingRooms/MeetingRooms";
+import PrivateRoute from "../pages/privateRoute/PrivateRoute";
+import RoomDetails from "../pages/roomDetails/RoomDetails";
 import Home from "../home/home/Home";
 import Main from "../layout/Main";
 import { createBrowserRouter } from "react-router-dom";
@@ -6,22 +7,25 @@ import ContactUs from "../pages/contactUs/ContactUs";
 import AboutUs from "../pages/aboutUs/AboutUs";
 import AuthPage from "../shared/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
+import ErrorPage from "../pages/error/ErrorPage";
+import BookingProcess from "../pages/bookingProcess/BookingProcess";
+import Checkout from "../pages/checkout/Checkout";
+import BookingSummary from "../pages/bookingSummary/BookingSummary";
+import MyBooking from "../pages/myBooking/MyBooking";
+import PaymentSucces from "../pages/payment/PaymentSucces";
+import MeetingRooms from "../pages/meetingRooms/MeetingRooms";
 import CreateRoom from "../pages/dashboard/D-component/admin/room/CreateRoom";
 import RoomList from "../pages/dashboard/D-component/admin/room/RoomList";
 import CreateSlot from "../pages/dashboard/D-component/admin/slot/CreateSlots";
 import SlotsList from "../pages/dashboard/D-component/admin/slot/SlotsList";
 import Booking from "../pages/dashboard/D-component/user/BookingList";
-import RoomDetails from "../pages/roomDetails/RoomDetails";
-import BookingProcess from "../pages/bookingProcess/BookingProcess";
-import Checkout from "../pages/checkout/Checkout";
-import BookingSummary from "../pages/bookingSummary/BookingSummary";
-import PaymentSucces from "../pages/payment/PaymentSucces";
-import MyBooking from "../pages/myBooking/MyBooking";
 
+// Router Configuration
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -33,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/roomDetails/:id",
-        element: <RoomDetails />,
+        element: (
+          <PrivateRoute>
+            <RoomDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/contact-us",
@@ -53,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/booking-summary",
-        element: <BookingSummary slot={undefined} />,
+        element: <BookingSummary />,
       },
       {
         path: "/checkout",
@@ -62,7 +70,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/auth",
+    path: "/auth", // Login page path
     element: <AuthPage />,
   },
   {
@@ -72,6 +80,7 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <Dashboard />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "create-room",

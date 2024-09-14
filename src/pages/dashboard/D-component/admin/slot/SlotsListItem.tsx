@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
@@ -15,6 +16,7 @@ import { toast } from "sonner"; // Importing the toast
 interface Slot {
   _id: string;
   room: {
+    _id:string
     name: string;
     roomNo: string;
   };

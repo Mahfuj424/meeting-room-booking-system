@@ -28,11 +28,13 @@ const SlotsList: React.FC = () => {
         </thead>
         <tbody>
           {isLoading ? (
-            <div className="text-primary flex justify-center mt-10">
-              <SyncLoader />
+            <div className=" flex justify-center mt-10">
+              <SyncLoader color="#1586FD" />
             </div>
           ) : (
-            slotData?.map((slot: any) => <SlotListItem Slot={slot}></SlotListItem>)
+            slotData?.map((slot: any) => (
+              <SlotListItem Slot={slot} roomData={[]}></SlotListItem>
+            ))
           )}
         </tbody>
       </table>

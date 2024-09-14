@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useGetAllSlotQuery } from "../../redux/features/slot/slotsApi";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useParams, useNavigate, ScrollRestoration } from "react-router-dom"; // Import useNavigate for navigation
 import dayjs, { Dayjs } from "dayjs";
 import Badge from "@mui/material/Badge";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -15,6 +16,7 @@ import { TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addSlot } from "../../redux/features/slotSlice/slotSlice"; // Import the addSlot action
 
+// Define the types for Slot and User interfaces
 interface Slot {
   _id: string;
   room: {
@@ -31,6 +33,11 @@ interface User {
   email: string;
   address: string;
   phone: string;
+  image?: string;
+}
+
+interface HighlightedDaysProps extends PickersDayProps<Dayjs> {
+  highlightedDays?: number[];
 }
 
 const BookingProcess: React.FC = () => {
@@ -51,9 +58,11 @@ const BookingProcess: React.FC = () => {
 
   // Extract available dates for highlighting from the slots data
   useEffect(() => {
-    const roomSlots = slots.filter((slot) => slot.room._id === id);
-    const availableDates = roomSlots.map((slot) => dayjs(slot.date).date());
-    setHighlightedDays(availableDates);
+    if (slots.length > 0) {
+      const roomSlots = slots.filter((slot) => slot.room._id === id);
+      const availableDates = roomSlots.map((slot) => dayjs(slot.date).date());
+      setHighlightedDays(availableDates);
+    }
   }, [slots, id]);
 
   // Handle slot selection when a checkbox is clicked
@@ -74,23 +83,21 @@ const BookingProcess: React.FC = () => {
   );
 
   // Custom PickersDay component to display the highlighted days
-  const ServerDay = (
-    props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
-  ) => {
+  const ServerDay = (props: HighlightedDaysProps) => {
     const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
     const isSelected =
-      !props.outsideCurrentMonth && highlightedDays.includes(day.date());
+      !outsideCurrentMonth && highlightedDays.includes(day.date());
 
     return (
       <Badge
-        key={props.day.toString()}
+        key={day.toString()}
         overlap="circular"
         badgeContent={isSelected ? "✅" : undefined}
       >
         <PickersDay
           {...other}
-          outsideCurrentMonth={outsideCurrentMonth}
           day={day}
+          outsideCurrentMonth={outsideCurrentMonth}
         />
       </Badge>
     );
@@ -110,9 +117,9 @@ const BookingProcess: React.FC = () => {
   const handleAddSlot = () => {
     const mappedSlots = selectedSlots.map((slot) => ({
       ...slot,
-      user: user, // Optionally add user data if required
+      room: [slot.room._id, slot.room.name], // Convert room object to an array of strings
+      user, // Optionally add user data if required
     }));
-    console.log(mappedSlots);
 
     // Dispatch the updated slots array to the Redux store
     if (mappedSlots.length > 0) {
@@ -122,7 +129,8 @@ const BookingProcess: React.FC = () => {
   };
 
   return (
-    <div className="dark:bg-darkBg">
+    <div className="dark:bg-darkBg dark:text-gray-300">
+      <ScrollRestoration />
       <div className="pt-24 max-w-7xl mx-auto pb-20 px-4">
         <div className="md:flex justify-between mb-4">
           {/* Date Picker */}
@@ -132,7 +140,7 @@ const BookingProcess: React.FC = () => {
             </label>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
-                className="shadow-md rounded"
+                className="shadow-md rounded dark:bg-darkCard"
                 value={selectedDate}
                 onChange={(newDate: Dayjs | null) => {
                   if (newDate) setSelectedDate(newDate);
@@ -140,29 +148,31 @@ const BookingProcess: React.FC = () => {
                 onMonthChange={handleMonthChange}
                 slots={{ day: ServerDay }}
                 slotProps={{ day: { highlightedDays } }}
-                renderLoading={() => <DayCalendarSkeleton />}
+                renderLoading={() => (
+                  <DayCalendarSkeleton className="text-white" />
+                )}
               />
             </LocalizationProvider>
           </div>
 
           {/* User Information Section */}
-          <div className="border shadow-md p-4 rounded-md w-full md:w-1/2 mb-10">
-            <h3 className="text-lg text-secondary font-semibold text-center">
+          <div className="border shadow-md dark:bg-darkCard dark:border-none  p-4 rounded-md w-full md:w-1/2 mb-10">
+            <h3 className="text-lg text-secondary dark:text-gray-300 font-semibold text-center">
               User Information
             </h3>
             <div className="flex justify-center my-5">
               <img
                 src={user?.image}
                 className="w-20 h-20 rounded-full"
-                alt=""
+                alt="User profile"
               />
             </div>
             <div className="grid grid-cols-2 gap-5 items-center">
               {/* User Fields */}
               {["name", "email", "address", "phone"].map((field) => (
-                <p className="flex-col flex" key={field}>
+                <p className="flex-col flex " key={field}>
                   <TextField
-                    defaultValue={user?.[field]}
+                    defaultValue={user?.[field as keyof User]}
                     id={`demo-helper-text-misaligned-${field}`}
                     label={field}
                   />
@@ -173,8 +183,8 @@ const BookingProcess: React.FC = () => {
         </div>
 
         {/* Table showing available slots */}
-        <table className="min-w-full border ">
-          <thead className="">
+        <table className="min-w-full border">
+          <thead>
             <tr>
               <th className="border px-4 py-2">Room Name</th>
               <th className="border px-4 py-2">Date</th>
@@ -204,7 +214,7 @@ const BookingProcess: React.FC = () => {
 
         {/* Display selected slots */}
         <div className="flex justify-end">
-          <div className="mt-4 ">
+          <div className="mt-4">
             <h3 className="text-xl">Selected Slots:</h3>
             {selectedSlots.map((slot, index) => (
               <div key={slot._id} className="flex gap-2 items-center">
@@ -222,9 +232,7 @@ const BookingProcess: React.FC = () => {
             selectedSlots.length > 0 ? "" : "hidden"
           }`}
         >
-          <CustomButton2
-            name="Proceed To Booking"
-          />
+          <CustomButton2 name="Proceed To Booking" />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 const Checkout = () => {
     return (
-        <div className="py-24">
+        <div>
             
         </div>
     );

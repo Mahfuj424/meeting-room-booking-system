@@ -18,7 +18,7 @@ const CreateSlot: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const room = roomData.find((room) => room.name === selectedRoom);
+    const room = roomData.find((room:any) => room.name === selectedRoom);
     console.log(room?._id);
 
     if (room) {
@@ -70,7 +70,7 @@ const CreateSlot: React.FC = () => {
             <option value="" disabled>
               Select a room
             </option>
-            {roomData.map((room) => (
+            {roomData.map((room:any) => (
               <option key={room.id} value={room.name}>
                 {room.name}
               </option>

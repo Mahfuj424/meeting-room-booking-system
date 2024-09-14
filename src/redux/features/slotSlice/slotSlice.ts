@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the Slot type
@@ -11,7 +12,7 @@ type Slot = {
 
 // Define the initial state with slots
 type SlotState = {
-  slots: Slot[];
+  slots: Slot[] | any;
 };
 
 const initialState: SlotState = {

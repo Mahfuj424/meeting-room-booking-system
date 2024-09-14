@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import CustomButton from "../../components/customButton/CustomButton";
 
 const Banner = () => {
@@ -17,7 +18,9 @@ const Banner = () => {
           simplifying your search for the perfect Room.
         </p>
         <div className="mt-6">
-          <CustomButton name="Book Now" />
+          <Link to="/meeting-rooms">
+            <CustomButton name="Book Now" />
+          </Link>
         </div>
       </div>
       <div className="image-content lg:w-1/2 mt-8 lg:mt-0">

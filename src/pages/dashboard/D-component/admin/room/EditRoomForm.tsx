@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaCloudUploadAlt, FaPlusCircle } from "react-icons/fa";
 import { BiLoaderCircle } from "react-icons/bi";
 
 // Define proper types for the form fields
 type RoomFormData = {
-  name: string | any;
+  name: string;
   roomNo: number;
   floorNo: number;
   capacity: number;
@@ -15,9 +13,9 @@ type RoomFormData = {
   images: File[]; // Images will be an array of File objects
 };
 
-type RoomFormProps = {
-  defaultValues?: {
-    name: string | any;
+type EditRoomFormProps = {
+  defaultValues: {
+    name: string;
     roomNo: number;
     floorNo: number;
     capacity: number;
@@ -25,25 +23,26 @@ type RoomFormProps = {
     amenities: string[];
     images: string[]; // Assuming image URLs for defaultValues
   };
-  onSubmit: (roomData: RoomFormData) => Promise<void>; // Assuming onSubmit returns a Promise
+  onHandleSubmit: (roomData: RoomFormData) => Promise<void>; // Assuming onSubmit returns a Promise
   isLoading: boolean;
 };
 
-const RoomForm: React.FC<RoomFormProps> = ({
+const EditRoomForm: React.FC<EditRoomFormProps> = ({
   defaultValues,
-  onSubmit,
+  onHandleSubmit,
   isLoading,
 }) => {
-  const [amenities, setAmenities] = useState<string[]>(
-    defaultValues?.amenities || []
-  );
+  const [amenities, setAmenities] = useState<string[]>(defaultValues.amenities);
   const [amenityInput, setAmenityInput] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>(
-    defaultValues?.images || []
+    defaultValues.images
   );
   const [loading, setLoading] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  console.log(imageUrls);
 
+  // Function to handle adding an amenity
   const handleAddAmenity = () => {
     if (amenityInput) {
       setAmenities([...amenities, amenityInput]);
@@ -51,16 +50,17 @@ const RoomForm: React.FC<RoomFormProps> = ({
     }
   };
 
+  // Function to remove an amenity
   const handleRemoveAmenity = (index: number) => {
     const newAmenities = [...amenities];
     newAmenities.splice(index, 1);
     setAmenities(newAmenities);
   };
 
+  // Handle image change (both new uploads and default previews)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setImageFiles(files);
-
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagePreviews([...imagePreviews, ...previews]);
   };
@@ -71,9 +71,42 @@ const RoomForm: React.FC<RoomFormProps> = ({
     setImagePreviews(newImagePreviews);
   };
 
+  const uploadImageToImgBB = async (images: File[]) => {
+    const apiKey = "20d1c8d996641e7f8f7de1db621a33ec";
+
+    // Create a FormData instance for each image
+    const uploadPromises = images.map(async (image) => {
+      const formData = new FormData();
+      formData.append("image", image); // Append image file to the FormData
+
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${apiKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Image upload failed: ${data.error.message}`);
+        }
+
+        return data.data.display_url; // Return image URL
+      } catch (error) {
+        console.error("Image upload error:", error);
+        throw error;
+      }
+    });
+
+    return Promise.all(uploadPromises); // Wait for all images to upload
+  };
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when form is submitted
+    setLoading(true);
 
     const form = e.target as HTMLFormElement;
     const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
@@ -82,22 +115,33 @@ const RoomForm: React.FC<RoomFormProps> = ({
     const capacity = parseInt(form.capacity.value, 10);
     const pricePerSlot = parseFloat(form.pricePerSlot.value);
 
-    const roomData: RoomFormData = {
-      name,
-      roomNo,
-      floorNo,
-      capacity,
-      pricePerSlot,
-      amenities,
-      images: imageFiles,
-    };
-
     try {
-      await onSubmit(roomData);
+      // Upload new images if any are selected
+      const uploadedImageUrls = await uploadImageToImgBB(imageFiles);
+
+      // Combine previously existing images and newly uploaded ones
+      const allImageUrls = [...imagePreviews, ...uploadedImageUrls];
+
+      // Set the image URLs in the state
+      setImageUrls(allImageUrls);
+
+      // Prepare the room data with the newly uploaded image URLs
+      const roomData: RoomFormData = {
+        name,
+        roomNo,
+        floorNo,
+        capacity,
+        pricePerSlot,
+        amenities,
+        images: allImageUrls, // Set the URLs of the images as value
+      };
+
+      // Submit the form data
+      await onHandleSubmit(roomData);
     } catch (error) {
       console.error("Failed to submit form:", error);
     } finally {
-      setLoading(false); // Reset loading state after submission
+      setLoading(false);
     }
   };
 
@@ -159,7 +203,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               type="text"
               name="name"
               id="name"
-              defaultValue={defaultValues?.name}
+              defaultValue={defaultValues.name}
               className="mt-1 block w-full py-3 px-3 border rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
               required
             />
@@ -176,7 +220,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               type="number"
               name="roomNo"
               id="roomNo"
-              defaultValue={defaultValues?.roomNo}
+              defaultValue={defaultValues.roomNo}
               className="mt-1 block w-full py-3 px-3 border rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
               required
             />
@@ -193,7 +237,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               type="number"
               name="floorNo"
               id="floorNo"
-              defaultValue={defaultValues?.floorNo}
+              defaultValue={defaultValues.floorNo}
               className="mt-1 block w-full py-3 px-3 border rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
               required
             />
@@ -210,7 +254,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               type="number"
               name="capacity"
               id="capacity"
-              defaultValue={defaultValues?.capacity}
+              defaultValue={defaultValues.capacity}
               className="mt-1 block w-full py-3 px-3 border rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
               required
             />
@@ -227,7 +271,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               type="number"
               name="pricePerSlot"
               id="pricePerSlot"
-              defaultValue={defaultValues?.pricePerSlot}
+              defaultValue={defaultValues.pricePerSlot}
               className="mt-1 block w-full py-3 px-3 border rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
               required
             />
@@ -269,7 +313,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveAmenity(index)}
-                    className="text-red-500 hover:text-red-700 transition duration-300"
+                    className="text-red-500 text-xl hover:text-red-700"
                   >
                     &times;
                   </button>
@@ -280,23 +324,22 @@ const RoomForm: React.FC<RoomFormProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-end w-full mt-6">
-        <button
-          type="submit"
-          className="bg-primary text-white w-full py-3 px-6 rounded-md shadow-md hover:bg-primary-dark transition duration-300"
-          disabled={isLoading || loading}
-        >
-          {isLoading || loading ? (
-            <div className="w-full">
-              <BiLoaderCircle className="animate-spin h-6 w-6" />
-            </div>
-          ) : (
-            "Save & Continue"
-          )}
-        </button>
-      </div>
+      {/* Submit button */}
+      <button
+        type="submit"
+        disabled={loading || isLoading}
+        className={`flex justify-center items-center w-full py-3 rounded-md text-white font-semibold bg-primary hover:bg-primary-dark transition duration-300 ${
+          loading || isLoading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
+        {loading || isLoading ? (
+          <BiLoaderCircle className="animate-spin text-2xl" />
+        ) : (
+          "Update Room"
+        )}
+      </button>
     </form>
   );
 };
 
-export default RoomForm;
+export default EditRoomForm;

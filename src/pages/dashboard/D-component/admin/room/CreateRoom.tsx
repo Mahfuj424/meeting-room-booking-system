@@ -1,117 +1,68 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
-import React from "react";
+
 import { useCreateRoomMutation } from "../../../../../redux/features/room/roomApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import RoomForm from "./RoomForm";
 
+// Function to upload an image to ImgBB
 const CreateRoom: React.FC = () => {
   const [postRoom, { isLoading }] = useCreateRoomMutation();
   const navigate = useNavigate();
 
-  const handleFormSubmit = async (formData: any) => {
-    let { imageFiles, ...roomData } = formData;
-
-    // Ensure imageFiles is an array
-    imageFiles = Array.isArray(imageFiles) ? imageFiles : [imageFiles];
-
-    // Allowed image types
-    const validImageTypes = ["image/jpeg", "image/png", "image/webp"];
-
-    // Debugging: log file types
-    console.log(
-      "Uploaded files:",
-      imageFiles.map((file: File) => file.type)
-    );
-
-    // Validate image file types
-    const invalidFiles = imageFiles.filter(
-      (file: File) => !validImageTypes.includes(file?.type)
-    );
-
-    if (invalidFiles.length > 0) {
-      toast.error(
-        "Invalid image file type. Only JPEG, PNG, and WEBP are allowed."
-      );
-      console.log("Invalid file types:", invalidFiles);
-      return;
-    }
-
-    // Check for file size (example: 10MB limit)
-    const maxSizeInBytes = 10 * 1024 * 1024; // 10MB limit
-    const oversizedFiles = imageFiles.filter(
-      (file: File) => file.size > maxSizeInBytes
-    );
-
-    if (oversizedFiles.length > 0) {
-      toast.error("Image size exceeds 10MB. Please upload smaller files.");
-      return;
-    }
-
-    // Upload images and get URLs
-    const imageUrls = await handleMultipleImageUploads(imageFiles);
-    if (imageUrls.length === 0) {
-      toast.error("Image upload failed. Please try again.");
-      return;
-    }
-
-    const roomInfo = {
-      ...roomData,
-      images: imageUrls, // Store uploaded image URLs
-    };
-
-    try {
-      await postRoom(roomInfo).unwrap();
-      toast.success("Room created successfully!");
-      navigate("/dashboard/rooms-list");
-    } catch (error) {
-      console.error("Error creating room:", error);
-      toast.error("Failed to create room. Please try again.");
-    }
-  };
-
-  // Function to handle multiple image uploads
-  const handleMultipleImageUploads = async (imageFiles: File[]) => {
-    const imageUrls: string[] = [];
-
-    for (const imageFile of imageFiles) {
-      const imageUrl = await handleImageUpload(imageFile);
-      if (imageUrl) {
-        imageUrls.push(imageUrl); // Collect image URLs
-      }
-    }
-
-    return imageUrls;
-  };
-
-  // Function to upload a single image
-  const handleImageUpload = async (imageFile: File) => {
+  const uploadImage = async (images: File[] | any) => {
+    const apiKey = "20d1c8d996641e7f8f7de1db621a33ec";
     const formData = new FormData();
-    formData.append("image", imageFile); // Append image to form data
+
+    // Upload images one by one
+    const uploadPromises = images.map(async (image: File) => {
+      formData.append("image", image); 
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${apiKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Image upload failed: ${data.error.message}`);
+        }
+
+        return data.data.display_url;
+      } catch (error) {
+        console.error("Image upload error:", error);
+        throw error; 
+      }
+    });
+
+    return Promise.all(uploadPromises); 
+  };
+
+  const handleFormSubmit = async (formData: any) => {
+    let { images, ...roomData } = formData;
+
+    // Ensure images is an array
+    images = Array.from(images);
 
     try {
-      const response = await fetch(
-        `https://api.imgbb.com/1/upload?key=b07b62fb5b3f5203ec96c940be5f16ba`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const data = await response.json();
+      // Upload each image and get the URLs
+      const uploadedImageUrls = await uploadImage(images);
 
-      if (response.ok) {
-        return data.data.url; // Return the image URL
-      } else {
-        console.error("Error uploading image:", data);
-        toast.error(
-          "Failed to upload image. Please check the file format or size."
-        );
-        return null;
-      }
-    } catch (error) {
-      console.error("Upload failed:", error);
-      toast.error("Image upload failed. Please try again.");
-      return null;
+      const roomInfo = {
+        ...roomData,
+        images: uploadedImageUrls, // Store the uploaded image URLs
+      };
+      console.log(roomInfo);
+      await postRoom(roomInfo).unwrap(); 
+      toast.success("Room created successfully!");
+      navigate("/dashboard/rooms-list"); 
+    } catch (error:any) {
+      console.error("Error creating room:", error);
+      toast.error(error?.data?.errorMessages[0]?.message);
     }
   };
 

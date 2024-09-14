@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog } from "@mui/material";
 import { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
-import RoomForm from "./RoomForm"; // Import the reusable RoomForm
 import Swal from "sweetalert2";
 import {
   useDeleteRoomMutation,
   useUpdateRoomMutation,
 } from "../../../../../redux/features/room/roomApi";
+import EditRoomForm from "./EditRoomForm";
 
-const RoomListitem = ({ room }) => {
+const RoomListitem = ({ room }:any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [updateRoom] = useUpdateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
@@ -23,7 +24,8 @@ const RoomListitem = ({ room }) => {
     setIsOpen(false);
   };
 
-  const handleFormSubmit = async (roomData) => {
+  const handleFormSubmit = async (roomData:any) => {
+    console.log(roomData);
     try {
       await updateRoom({ id: room._id, ...roomData }).unwrap();
       Swal.fire({
@@ -127,7 +129,7 @@ const RoomListitem = ({ room }) => {
           </button>
           <h3 className="text-xl font-semibold text-center mb-4">Edit Room</h3>
 
-          <RoomForm defaultValues={room} onSubmit={handleFormSubmit} />
+          <EditRoomForm defaultValues={room} onHandleSubmit={handleFormSubmit} isLoading={false} />
         </div>
       </Dialog>
     </>

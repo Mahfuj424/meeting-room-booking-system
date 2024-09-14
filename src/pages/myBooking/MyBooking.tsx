@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import MyBookingList from "./MyBookingList";
 import { useGetMyBookingsQuery } from "../../redux/features/booking/bookingApi";
 import SyncLoader from "react-spinners/SyncLoader";
+import './style.css'
 
 const MyBooking = () => {
   const { data, isLoading } = useGetMyBookingsQuery(undefined);
   const bookingData = data?.data;
   return (
-    <div className="h-screen pt-24 max-w-7xl mx-auto">
+    <div className="h-screen pt-24 max-w-7xl mx-auto overflow-y-auto">
+      <h1 className="text-secondary dark:text-white text-2xl font-semibold mb-5 text-center">All Booking Rooms</h1>
       <table className="min-w-full bg-white border-gray-200">
         <thead className="border-y-2">
           <tr>

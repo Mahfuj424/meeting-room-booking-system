@@ -23,6 +23,11 @@ const Navbar = () => {
     setDrawerOpen(!drawerOpen);
   };
 
+  const handleLogout = () => {
+    dispatch(logOut());
+    localStorage.removeItem("location");
+  };
+
   const closeDrawer = () => {
     setDrawerOpen(false);
   };
@@ -32,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-darkBg py-3 px-4 fixed w-full z-30">
+    <nav className="bg-white dark:bg-darkCard py-3 px-4 fixed w-full z-30">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to={"/"}>
           <div className="flex items-center gap-1">
@@ -81,7 +86,7 @@ const Navbar = () => {
         {/* User Icon with Dropdown */}
         <div className="relative md:block hidden">
           <div
-            className="flex items-center border-2 p-1 rounded-full border-primary gap-2 text-secondary dark:text-white"
+            className="flex items-center cursor-pointer border-2 p-1 rounded-full border-primary gap-2 text-secondary dark:text-white"
             onClick={toggleUserMenu}
           >
             {user ? (
@@ -99,7 +104,7 @@ const Navbar = () => {
               {user?.role === "admin" && (
                 <div>
                   <Link
-                    to="/dashboard"
+                    to="/dashboard/rooms-list"
                     className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Dashboard
@@ -125,7 +130,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     className="block w-full text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                    onClick={() => dispatch(logout)}
+                    onClick={handleLogout}
                   >
                     <div className="flex gap-1 items-center">
                       <LuLogOut />

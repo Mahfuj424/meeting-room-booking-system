@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineCopy } from "react-icons/ai";
@@ -66,6 +67,8 @@ const AuthPage: React.FC = () => {
     }
   };
 
+  const location = localStorage.getItem("location");
+
   const onSubmit = async (data: Partial<FormData>) => {
     const toastId = toast.loading(isLogin ? "Logging in..." : "Signing up...");
     try {
@@ -76,7 +79,7 @@ const AuthPage: React.FC = () => {
         toast.success("User logged in successfully", { id: toastId });
         const user = verifyToken(res.token);
         dispatch(setUser({ user, token: res.token }));
-        navigate(`/`);
+        navigate(location ? location : "/");
       } else {
         let imageUrl = "";
         if (data.image?.[0]) {
@@ -98,11 +101,12 @@ const AuthPage: React.FC = () => {
         console.log("res data", res);
         toast.success("User signed up successfully", { id: toastId });
         setIsLogin(true);
+        toast.success("Please Login", { id: toastId });
         navigate("/auth");
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error during signup/login:", error);
-      toast.error("Something went wrong", { id: toastId });
+      toast.error(error?.data?.message, { id: toastId });
     }
   };
 
@@ -118,7 +122,7 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center text-black dark:bg-darkBg dark:text-white">
-      <div className="bg-white border shadow-xl dark:bg-darkCard p-8 rounded-lg w-[450px]">
+      <div className="bg-white border dark:border-none shadow-xl dark:bg-darkCard p-8 rounded-lg w-[450px]">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-blue-300 dark:bg-darkBg rounded-full flex items-center justify-center overflow-hidden">
             {imageUrl ? (
@@ -149,7 +153,7 @@ const AuthPage: React.FC = () => {
                 type="text"
                 placeholder="Name"
                 {...register("name")}
-                className="mb-4 w-full border border-gray-300 dark:border-gray-600 p-2 rounded"
+                className="mb-4 w-full border outline-none dark:bg-gray-700 focus:border-none border-gray-300 focus:ring-2 focus:ring-primary dark:border-gray-600 p-2 rounded"
               />
             </>
           )}
@@ -157,7 +161,7 @@ const AuthPage: React.FC = () => {
             type="email"
             placeholder="Email"
             {...register("email", { required: true })}
-            className={`mb-4 w-full border ${
+            className={`mb-4 w-full border outline-none dark:bg-gray-700 focus:ring-2 focus:ring-primary ${
               errors.email
                 ? "border-red-500"
                 : "border-gray-300 dark:border-gray-600"
@@ -167,7 +171,7 @@ const AuthPage: React.FC = () => {
             type="password"
             placeholder="Password"
             {...register("password", { required: true })}
-            className={`mb-4 w-full border ${
+            className={`mb-4 w-full border outline-none dark:bg-gray-700 focus:ring-2 focus:ring-primary ${
               errors.password
                 ? "border-red-500"
                 : "border-gray-300 dark:border-gray-600"
@@ -179,19 +183,19 @@ const AuthPage: React.FC = () => {
                 type="text"
                 placeholder="Phone Number"
                 {...register("phoneNumber")}
-                className="mb-4 w-full border border-gray-300 dark:border-gray-600 p-2 rounded"
+                className="mb-4 w-full border outline-none dark:bg-gray-700 focus:ring-2 focus:ring-primary border-gray-300 dark:border-gray-600 p-2 rounded"
               />
               <input
                 type="text"
                 placeholder="Address"
                 {...register("address")}
-                className="mb-4 w-full border border-gray-300 dark:border-gray-600 p-2 rounded"
+                className="mb-4 w-full border outline-none dark:bg-gray-700 focus:ring-2 focus:ring-primary border-gray-300 dark:border-gray-600 p-2 rounded"
               />
             </>
           )}
           <button
             type="submit"
-            className="w-full bg-blue-500 dark:bg-darkBg text-white py-2 rounded mb-4"
+            className="w-full bg-blue-500  text-white py-2 rounded mb-4"
             disabled={isLoginLoading || false}
           >
             {isLogin ? "Sign In" : "Sign Up"}
@@ -287,7 +291,7 @@ const AuthPage: React.FC = () => {
             <div className="text-right">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-blue-500 dark:bg-darkBg text-white py-2 px-4 rounded"
+                className="bg-blue-500  text-white py-2 px-4 rounded"
               >
                 Close
               </button>

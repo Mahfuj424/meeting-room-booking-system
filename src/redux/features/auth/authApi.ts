@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "../../../redux/api/baseApi";
 
 const authApi = baseApi.injectEndpoints({
@@ -9,7 +10,7 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
-    signup: builder.mutation({
+    signup: builder.mutation<any, any>({
       query: (userInfo) => {
         console.log("User Info in Mutation =>", userInfo); // Log to verify
         return {

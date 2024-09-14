@@ -1,10 +1,36 @@
 import { useSelector } from "react-redux";
 import { selectSlots } from "../../redux/features/slotSlice/slotSlice";
-import CustomButton2 from "../../components/customButton/CustomButton";
-import { useState } from "react";
 import { useCreateBookingMutation } from "../../redux/features/booking/bookingApi";
+import { BiLoaderCircle } from "react-icons/bi";
+import { ScrollRestoration } from "react-router-dom";
 
-const formatDate = (isoDate: string) => {
+// Define types for Slot, Room, and User
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  image: string;
+}
+
+interface Room {
+  _id: string;
+  name: string;
+  pricePerSlot: number;
+}
+
+interface Slot {
+  _id: string;
+  room: Room;
+  user: User;
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
+// Redux selector should return an array of Slot
+const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
   return date.toLocaleString("en-US", {
     timeZone: "Asia/Dhaka",
@@ -14,11 +40,11 @@ const formatDate = (isoDate: string) => {
 };
 
 // Merging date and time into a valid Date object
-const mergeDateAndTime = (date: string, time: string) => {
+const mergeDateAndTime = (date: string, time: string): Date => {
   return new Date(`${date.split("T")[0]}T${time}:00`);
 };
 
-const formatTime = (date: string, time: string) => {
+const formatTime = (date: string, time: string): string => {
   const dateTime = mergeDateAndTime(date, time);
   return dateTime.toLocaleString("en-US", {
     timeZone: "Asia/Dhaka",
@@ -33,7 +59,7 @@ const calculateDurationInHours = (
   startTime: string,
   endDate: string,
   endTime: string
-) => {
+): string => {
   const startDateTime = mergeDateAndTime(startDate, startTime);
   const endDateTime = mergeDateAndTime(endDate, endTime);
   const differenceInMs = endDateTime.getTime() - startDateTime.getTime();
@@ -41,14 +67,9 @@ const calculateDurationInHours = (
   return hours.toFixed(2); // Rounded to 2 decimal places
 };
 
-const BookingSummary = () => {
-  const slots = useSelector(selectSlots);
-  const [showButton, setShowButton] = useState(false);
-  const [createBooking, { data }] = useCreateBookingMutation();
-
-  const handleShow = () => {
-    setShowButton(true);
-  };
+const BookingSummary: React.FC = () => {
+  const slots: Slot[] = useSelector(selectSlots);
+  const [createBooking, { isLoading }] = useCreateBookingMutation();
 
   if (!slots?.length) {
     return <div>No slots available</div>;
@@ -90,20 +111,21 @@ const BookingSummary = () => {
       room: roomId,
       user: user?._id,
     };
-    console.log(bookingData);
-    const res = await createBooking(bookingData);
-    console.log(res);
+
     try {
-      window.location.href = res?.data?.data?.payment_url;
+      const res = await createBooking(bookingData).unwrap();
+      console.log(res);
+      window.location.href = res?.data?.payment_url;
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="py-24">
+    <div className="py-24 dark:bg-darkBg">
+      <ScrollRestoration />
       <div className="max-w-7xl mx-auto">
-        <div className="md:w-2/3 shadow-md border rounded-md flex justify-around mx-auto px-8 py-5">
+        <div className="md:w-2/3 shadow-md border dark:border-none dark:bg-darkCard dark:text-gray-300 rounded-md flex justify-around mx-auto px-8 py-5">
           {/* User Information */}
           <div className="space-y-3">
             <h1>User Information</h1>
@@ -154,26 +176,22 @@ const BookingSummary = () => {
               <span className="text-lg">Total Duration:</span> {totalDuration}{" "}
               hours
             </h1>
-            <h1 className="font-semibold text-secondary">
+            <h1 className="font-semibold text-secondary dark:text-gray-300">
               <span className="text-lg">Total Cost:</span> ${totalPrice}
             </h1>
 
-            <div onClick={handleShow}>
-              <CustomButton2 name="Proced to Checkout" />
+            <div onClick={handleBooking}>
+              <button
+                type="submit"
+                className="bg-primary text-white py-3 px-4 rounded-md w-full"
+              >
+                {isLoading ? (
+                  <BiLoaderCircle className="mx-auto animate-spin text-white" />
+                ) : (
+                  "Proceed to Checkout"
+                )}
+              </button>
             </div>
-            {showButton && (
-              <div className="space-x-2">
-                <button className="text-white bg-[#635BFF] px-3 py-1 rounded-full">
-                  Stripe
-                </button>
-                <button onClick={handleBooking} className="text-white bg-[#FE9900] px-3 py-1 rounded-full">
-                  AamarPay
-                </button>
-                <button className="text-white bg-[#e2136e] px-3 py-1 rounded-full">
-                  Bkash
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

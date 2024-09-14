@@ -21,26 +21,6 @@ const Footer: React.FC = () => {
             </h1>
           </div>
 
-          <div className="flex space-x-4 mt-4">
-            <a
-              href="#"
-              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
-            >
-              <FaFacebook className="text-3xl" />
-            </a>
-            <a
-              href="#"
-              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
-            >
-              <BsLinkedin className="text-3xl" />
-            </a>
-            <a
-              href="#"
-              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
-            >
-              <FaSquareXTwitter className="text-3xl" />
-            </a>
-          </div>
           <div className="my-5 text-seconday">
             <p>
               Our hotels offer glamour and comfort that expands the imagination
@@ -145,19 +125,52 @@ const Footer: React.FC = () => {
               <FiSend className="text-xl" />
             </button>
           </div>
-          <div className="mt-4 flex space-x-4">
-            <img src="/path-to-badge1.png" alt="Badge" className="h-8" />
-            <img src="/path-to-badge2.png" alt="Badge" className="h-8" />
+          <div className="flex space-x-4 mt-4">
+            <a
+              href="#"
+              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
+            >
+              <FaFacebook className="text-3xl" />
+            </a>
+            <a
+              href="#"
+              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
+            >
+              <BsLinkedin className="text-3xl" />
+            </a>
+            <a
+              href="#"
+              className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
+            >
+              <FaSquareXTwitter className="text-3xl" />
+            </a>
           </div>
-          <div className="mt-4 flex space-x-2">
-            <img src="/path-to-visa.png" alt="Visa" className="h-6" />
+          <div className="flex space-x-2 mt-10">
             <img
-              src="/path-to-mastercard.png"
-              alt="Mastercard"
-              className="h-6"
+              src="https://i.postimg.cc/mDZ6bT8B/visa.png"
+              alt="Visa"
+              className="w-8 h-auto"
             />
-            <img src="/path-to-amex.png" alt="Amex" className="h-6" />
-            <img src="/path-to-diners.png" alt="Diners" className="h-6" />
+            <img
+              src="https://i.postimg.cc/0jTfJvd6/paypal.png"
+              alt="Discover"
+              className="w-8 h-auto"
+            />
+            <img
+              src="https://i.postimg.cc/bwj77fcN/discover.png"
+              alt="MasterCard"
+              className="w-8 h-auto"
+            />
+            <img
+              src="https://i.postimg.cc/G3ySdgjB/master-card.png"
+              alt="PayPal"
+              className="w-8 h-auto"
+            />
+            <img
+              src="https://i.postimg.cc/D0XNNBxX/amarican-express.png"
+              alt="American Express"
+              className="w-8 h-auto"
+            />
           </div>
         </div>
       </div>
