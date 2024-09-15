@@ -1,22 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useGetAllSlotQuery } from "../../redux/features/slot/slotsApi";
-import { useParams, useNavigate, ScrollRestoration } from "react-router-dom"; // Import useNavigate for navigation
-import dayjs, { Dayjs } from "dayjs";
-import Badge from "@mui/material/Badge";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
+import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
+import dayjs from "dayjs";
 import { useAppSelector } from "../../redux/hook";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import CustomButton2 from "../../components/customButton/CustomButton";
 import { TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { addSlot } from "../../redux/features/slotSlice/slotSlice"; // Import the addSlot action
+import { addSlot } from "../../redux/features/slotSlice/slotSlice";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Add custom styles for the date picker if necessary
 
-// Define the types for Slot and User interfaces
 interface Slot {
   _id: string;
   room: {
@@ -36,27 +32,35 @@ interface User {
   image?: string;
 }
 
-interface HighlightedDaysProps extends PickersDayProps<Dayjs> {
-  highlightedDays?: number[];
-}
-
 const BookingProcess: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Room ID from URL params
-  const { data } = useGetAllSlotQuery(undefined); // Fetch all available slots
-  const slots: Slot[] = data?.data || []; // Default to empty array if no data is present
-  const [selectedSlots, setSelectedSlots] = useState<Slot[]>([]); // Track selected slots
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs()); // Track selected date
-  const [highlightedDays, setHighlightedDays] = useState<number[]>([]); // Track highlighted days
-  const user: User = useAppSelector(selectCurrentUser); // Get user data from Redux store
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetAllSlotQuery(undefined);
+  const slots: Slot[] = data?.data || [];
+  const [selectedSlots, setSelectedSlots] = useState<Slot[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
+  const user: User = useAppSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Use navigate to programmatically redirect
+  const navigate = useNavigate();
 
-  // Function to format the date
-  const formatDate = (date: Dayjs | string): string => {
+  const formatDate = (date: Date | string): string => {
     return dayjs(date).format("YYYY-MM-DD");
   };
 
-  // Extract available dates for highlighting from the slots data
+  // Get the earliest available slot date from the slots array
+  const getEarliestSlotDate = () => {
+    if (slots.length === 0) return new Date(); // Fallback to today if no slots available
+
+    const sortedSlots = slots
+      .filter((slot) => slot.room._id === id)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    return new Date(sortedSlots[0].date); // Get the earliest date from sorted slots
+  };
+
+  const minSelectableDate = getEarliestSlotDate(); // Dynamically set min selectable date
+  const today = new Date();
+
   useEffect(() => {
     if (slots.length > 0) {
       const roomSlots = slots.filter((slot) => slot.room._id === id);
@@ -65,7 +69,6 @@ const BookingProcess: React.FC = () => {
     }
   }, [slots, id]);
 
-  // Handle slot selection when a checkbox is clicked
   const handleSlotSelection = (slot: Slot) => {
     const isSelected = selectedSlots.some((s) => s._id === slot._id);
     if (isSelected) {
@@ -75,49 +78,31 @@ const BookingProcess: React.FC = () => {
     }
   };
 
-  // Filter slots by room ID and selected date
   const filteredSlots = slots.filter(
     (slot) =>
       slot?.room?._id === id &&
       formatDate(slot?.date) === formatDate(selectedDate)
   );
 
-  // Custom PickersDay component to display the highlighted days
-  const ServerDay = (props: HighlightedDaysProps) => {
-    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
-    const isSelected =
-      !outsideCurrentMonth && highlightedDays.includes(day.date());
-
-    return (
-      <Badge
-        key={day.toString()}
-        overlap="circular"
-        badgeContent={isSelected ? "✅" : undefined}
-      >
-        <PickersDay
-          {...other}
-          day={day}
-          outsideCurrentMonth={outsideCurrentMonth}
-        />
-      </Badge>
-    );
-  };
-
-  // Handle month change to refetch the highlighted days
-  const handleMonthChange = (date: Dayjs) => {
+  const handleMonthChange = (date: Date) => {
     const roomSlots = slots.filter(
       (slot) =>
-        slot.room._id === id && dayjs(slot.date).month() === date.month()
+        slot.room._id === id && dayjs(slot.date).month() === dayjs(date).month()
     );
     const availableDates = roomSlots.map((slot) => dayjs(slot.date).date());
     setHighlightedDays(availableDates);
   };
 
-  // Function to map and dispatch selected slots
+  const handleDateChange = (date: any) => {
+    // Ensure that the selected date is today or later
+    if (date >= today) {
+      setSelectedDate(date);
+    }
+  };
+
   const handleAddSlot = () => {
     const mappedSlots = selectedSlots.map((slot) => ({
       ...slot,
-      room: [slot.room._id, slot.room.name], // Convert room object to an array of strings
       user, // Optionally add user data if required
     }));
 
@@ -134,29 +119,36 @@ const BookingProcess: React.FC = () => {
       <div className="pt-24 max-w-7xl mx-auto pb-20 px-4">
         <div className="md:flex justify-between mb-4">
           {/* Date Picker */}
-          <div>
-            <label className="block mb-2 text-xl font-medium dark:text-white text-gray-900">
+          <div className="w-full md:w-[500px] p-6">
+            <label className="block mb-3 text-2xl font-semibold dark:text-white text-gray-900">
               Select Date
             </label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar
-                className="shadow-md rounded dark:bg-darkCard"
-                value={selectedDate}
-                onChange={(newDate: Dayjs | null) => {
-                  if (newDate) setSelectedDate(newDate);
-                }}
-                onMonthChange={handleMonthChange}
-                slots={{ day: ServerDay }}
-                slotProps={{ day: { highlightedDays } }}
-                renderLoading={() => (
-                  <DayCalendarSkeleton className="text-white" />
-                )}
-              />
-            </LocalizationProvider>
+            <DatePicker
+              className="w-[800px]"
+              selected={selectedDate}
+              onChange={handleDateChange}
+              onMonthChange={handleMonthChange}
+              minDate={minSelectableDate} // Set the minimum date to the earliest available slot date
+              inline
+              highlightDates={highlightedDays.map(
+                (day) =>
+                  new Date(
+                    selectedDate.getFullYear(),
+                    selectedDate.getMonth(),
+                    day
+                  )
+              )}
+              calendarClassName="shadow-md  rounded-lg dark:bg-darkCard p-3"
+              dayClassName={(date: any) =>
+                highlightedDays.includes(date.getDate())
+                  ? "highlighted-day"
+                  : ""
+              }
+            />
           </div>
 
           {/* User Information Section */}
-          <div className="border shadow-md dark:bg-darkCard dark:border-none  p-4 rounded-md w-full md:w-1/2 mb-10">
+          <div className="border shadow-md dark:bg-darkCard dark:border-none p-4 rounded-md w-full md:w-1/2 mb-10">
             <h3 className="text-lg text-secondary dark:text-gray-300 font-semibold text-center">
               User Information
             </h3>
@@ -168,12 +160,10 @@ const BookingProcess: React.FC = () => {
               />
             </div>
             <div className="grid grid-cols-2 gap-5 items-center">
-              {/* User Fields */}
               {["name", "email", "address", "phone"].map((field) => (
-                <p className="flex-col flex " key={field}>
+                <p className="flex-col flex" key={field}>
                   <TextField
                     defaultValue={user?.[field as keyof User]}
-                    id={`demo-helper-text-misaligned-${field}`}
                     label={field}
                   />
                 </p>

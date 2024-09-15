@@ -17,6 +17,8 @@ const FilterPanel: React.FC = () => {
   const [sortBy, setSortBy] = useState("Default"); // Sort by state
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Toggle sort dropdown
   const [isCapacityOpen, setIsCapacityOpen] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Pagination state
+  const roomsPerPage = 6; // Number of rooms to show per page
 
   // Fetch room data
   const { data, isLoading } = useGetAllRoomsQuery({
@@ -70,9 +72,25 @@ const FilterPanel: React.FC = () => {
     e.preventDefault();
     const form = e.target;
     const searchText = form.search.value;
-    setSearchText(searchText)
+    setSearchText(searchText);
     // Perform search or refetch data here
   };
+
+  const totalRooms = rooms?.length || 0;
+  const totalPages = Math.ceil(totalRooms / roomsPerPage);
+
+  const indexOfLastRoom = currentPage * roomsPerPage;
+  const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
+  const currentRooms = rooms?.slice(indexOfFirstRoom, indexOfLastRoom);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1
+  );
 
   return (
     <div className="pt-28 bg-white dark:bg-darkBg">
@@ -275,7 +293,7 @@ const FilterPanel: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {rooms?.map((room:any) => (
+              {currentRooms?.map((room: any) => (
                 <CustomCard
                   key={room._id}
                   id={room._id}
@@ -289,25 +307,43 @@ const FilterPanel: React.FC = () => {
           )}
 
           {/* Pagination Controls */}
-          {/* <div className="flex justify-between items-center mt-6">
+          <div className="flex gap-5 justify-center items-center mt-6">
             <button
-              className="bg-red-500 text-white p-2 rounded"
+              className={`bg-primary text-white p-2 rounded ${
+                currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               &lt; Prev
             </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
+            <div className="flex gap-2">
+              {pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  className={`px-3 py-2 rounded ${
+                    number === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-gray-200 text-gray-800"
+                  } hover:bg-primary hover:text-white`}
+                  onClick={() => handlePageChange(number)}
+                >
+                  {number}
+                </button>
+              ))}
+            </div>
             <button
-              className="bg-red-500 text-white p-2 rounded"
+              className={`bg-primary text-white p-2 rounded ${
+                currentPage === totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
               Next &gt;
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

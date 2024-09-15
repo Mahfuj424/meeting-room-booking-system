@@ -69,6 +69,7 @@ const calculateDurationInHours = (
 
 const BookingSummary: React.FC = () => {
   const slots: Slot[] = useSelector(selectSlots);
+  console.log(slots);
   const [createBooking, { isLoading }] = useCreateBookingMutation();
 
   if (!slots?.length) {
