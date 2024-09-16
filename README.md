@@ -45,8 +45,8 @@ The Meeting Room Booking System is a web-based platform that allows users to eas
 ## Technologies Used
 
 - **Frontend**: React, Redux, TypeScript
-- **Backend**: Node.js, Express (or any backend tech)
-- **Database**: MongoDB (or any NoSQL/SQL database)
+- **Backend**: Node.js, Express Mongoose
+- **Database**: MongoDB 
 - **Styling**: Tailwind CSS
 - **Authentication**: JWT for secure authentication
 
@@ -55,4 +55,6 @@ The Meeting Room Booking System is a web-based platform that allows users to eas
 1. Clone the repository:
    ```bash
    git clone https://github.com/Mahfuj424/meeting-room-booking-system
+   cd your path
+   npm install
    ```
