@@ -20,7 +20,32 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getUsers: builder.query<any, any>({
+      query: () => {
+        // Log to verify
+        return {
+          url: "/auth",
+          method: "GET",
+        };
+      },
+      providesTags: ["Room"],
+    }),
+    updateUser: builder.mutation<any, any>({
+      query: ({ role, id }) => {
+        return {
+          url: `/auth/role/${id}`,
+          method: "PATCH",
+          body: { role },
+        };
+      },
+      invalidatesTags: ["Room"],
+    }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation } = authApi;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useGetUsersQuery,
+  useUpdateUserMutation,
+} = authApi;

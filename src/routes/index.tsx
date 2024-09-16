@@ -19,6 +19,7 @@ import RoomList from "../pages/dashboard/D-component/admin/room/RoomList";
 import CreateSlot from "../pages/dashboard/D-component/admin/slot/CreateSlots";
 import SlotsList from "../pages/dashboard/D-component/admin/slot/SlotsList";
 import Booking from "../pages/dashboard/D-component/user/BookingList";
+import AllUser from "../pages/dashboard/D-component/admin/users/AllUser";
 
 // Router Configuration
 const router = createBrowserRouter([
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "bookings",
         element: <Booking />,
+      },
+      {
+        path: "users",
+        element: <AllUser />,
       },
     ],
   },

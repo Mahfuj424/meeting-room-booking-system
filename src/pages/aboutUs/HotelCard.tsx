@@ -10,14 +10,14 @@ const HotelCard: React.FC<Props> = () => {
         <div className="relative">
           <div className="lg:w-[700px] flex justify-center">
             <img
-              src="https://point.moxcreative.com/ophelia/wp-content/uploads/sites/31/2022/06/cozy-hotel-room-interior.jpg" // Replace with your image path or use a public URL
+              src="https://i.ibb.co.com/sJdNhg7/Modern-meeting-room-with-advanced-technology-1.webp" // Replace with your image path or use a public URL
               alt="Hotel Room"
               className="rounded-lg"
             />
           </div>
           <div className="absolute -bottom-5 -right-8 border-8 rounded-md border-white">
             <img
-              src="https://point.moxcreative.com/ophelia/wp-content/uploads/sites/31/2022/06/cozy-hotel-room-interior.jpg" // Replace with your image path or use a public URL
+              src="https://i.ibb.co.com/8svQJ6S/designing-meeting-rooms-for-the-contemporary-office-partitions-seating-tables-and-lighting-11.jpg" // Replace with your image path or use a public URL
               alt="Hotel Room"
               className="w-40 h-28 rounded-md md:block hidden"
             />

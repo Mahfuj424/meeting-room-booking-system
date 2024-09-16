@@ -280,21 +280,19 @@ const RoomForm: React.FC<RoomFormProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-end w-full mt-6">
-        <button
-          type="submit"
-          className="bg-primary text-white w-full py-3 px-6 rounded-md shadow-md hover:bg-primary-dark transition duration-300"
-          disabled={isLoading || loading}
-        >
-          {isLoading || loading ? (
-            <div className="w-full">
-              <BiLoaderCircle className="animate-spin h-6 w-6" />
-            </div>
-          ) : (
-            "Save & Continue"
-          )}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={loading || isLoading}
+        className={`flex justify-center items-center w-full py-3 rounded-md text-white font-semibold bg-primary hover:bg-primary-dark transition duration-300 ${
+          loading || isLoading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
+        {loading || isLoading ? (
+          <BiLoaderCircle className="animate-spin text-2xl" />
+        ) : (
+          "Create Room"
+        )}
+      </button>
     </form>
   );
 };

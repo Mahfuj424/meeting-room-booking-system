@@ -142,35 +142,9 @@ const Footer: React.FC = () => {
               href="#"
               className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
             >
+              
               <FaSquareXTwitter className="text-3xl" />
             </a>
-          </div>
-          <div className="flex space-x-2 mt-10">
-            <img
-              src="https://i.postimg.cc/mDZ6bT8B/visa.png"
-              alt="Visa"
-              className="w-8 h-auto"
-            />
-            <img
-              src="https://i.postimg.cc/0jTfJvd6/paypal.png"
-              alt="Discover"
-              className="w-8 h-auto"
-            />
-            <img
-              src="https://i.postimg.cc/bwj77fcN/discover.png"
-              alt="MasterCard"
-              className="w-8 h-auto"
-            />
-            <img
-              src="https://i.postimg.cc/G3ySdgjB/master-card.png"
-              alt="PayPal"
-              className="w-8 h-auto"
-            />
-            <img
-              src="https://i.postimg.cc/D0XNNBxX/amarican-express.png"
-              alt="American Express"
-              className="w-8 h-auto"
-            />
           </div>
         </div>
       </div>

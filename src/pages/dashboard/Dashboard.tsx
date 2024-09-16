@@ -16,17 +16,14 @@ import { MdMeetingRoom, MdEventSeat } from "react-icons/md";
 import { useDarkMode } from "../../DarkModeContext";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hook";
-
-
+import { FaUserPen } from "react-icons/fa6";
 
 const DashboardLayout: React.FC = () => {
-
   const user = useAppSelector(selectCurrentUser);
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSection, setOpenSection] = useState<string | null>(null);
-
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
@@ -105,22 +102,28 @@ const DashboardLayout: React.FC = () => {
                 )}
               </div>
               <div>
-                <h2
-                  className="font-bold flex items-center cursor-pointer"
-                  onClick={() => toggleSection("booking")}
-                >
-                  <PiBookmarksSimpleFill className="mr-2" />
-                  {sidebarOpen && "Booking"}
-                </h2>
-                {openSection === "booking" && sidebarOpen && (
-                  <ul className="space-y-2 ml-6 mt-2">
-                    <li>
-                      <Link className="flex items-center" to="bookings">
-                        <BsCalendar2Check className="mr-2" /> Booking
-                      </Link>
-                    </li>
-                  </ul>
-                )}
+                <ul>
+                  <li>
+                    <Link
+                      className="flex items-center gap-2 font-bold"
+                      to="bookings"
+                    >
+                      <PiBookmarksSimpleFill /> Bookings
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li>
+                    <Link
+                      className="flex items-center gap-2 font-bold"
+                      to="users"
+                    >
+                      <FaUserPen /> Users
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </>
           )}
