@@ -6,7 +6,7 @@ interface Props {}
 const HotelCard: React.FC<Props> = () => {
   return (
     <div className="bg-[#f7f5f7] pb-8 dark:bg-darkBg">
-      <div className="flex mt-20 max-w-7xl mx-auto flex-col lg:flex-row dark:bg-darkBg p-6 rounded-lg ">
+      <div className="flex mt-20 max-w-7xl mx-auto flex-col lg:flex-row dark:bg-darkBg  rounded-lg ">
         <div className="relative">
           <div className="lg:w-[700px] flex justify-center">
             <img
@@ -42,8 +42,12 @@ const HotelCard: React.FC<Props> = () => {
           <div className="mt-6 flex items-center">
             <FiPhone className="text-primary mr-2" size={24} />
             <div>
-              <h3 className="text-lg font-semibold dark:text-gray-300">Reservation</h3>
-              <p className="text-secondary dark:text-gray-300">+6221-2002-2012</p>
+              <h3 className="text-lg font-semibold dark:text-gray-300">
+                Reservation
+              </h3>
+              <p className="text-secondary dark:text-gray-300">
+                +6221-2002-2012
+              </p>
             </div>
           </div>
         </div>

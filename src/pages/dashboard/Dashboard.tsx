@@ -45,9 +45,9 @@ const DashboardLayout: React.FC = () => {
           sidebarOpen ? "w-56" : "w-16"
         } dark:bg-darkBg dark:text-white bg-gray-100 text-black shadow-md`}
       >
-        <nav className="flex flex-col p-4 space-y-8 pt-14 ms-3  h-screen relative">
+        <nav className="flex flex-col p-4 space-y-8 pt-14 ms-3 h-screen relative">
           <button
-            className="absolute top-4 shadow dark:bg-white bg-primary text-white p-2 rounded-full right-3 text-xl  dark:text-black"
+            className="absolute top-4 shadow dark:bg-white bg-primary text-white p-2 rounded-full right-3 text-xl dark:text-black"
             onClick={toggleSidebar}
           >
             {sidebarOpen ? <BsChevronLeft /> : <BsChevronRight />}
@@ -55,7 +55,8 @@ const DashboardLayout: React.FC = () => {
 
           {user?.role === "admin" && (
             <>
-              <div className="">
+              {/* Room Section */}
+              <div>
                 <h2
                   className="font-bold flex items-center cursor-pointer"
                   onClick={() => toggleSection("room")}
@@ -78,6 +79,8 @@ const DashboardLayout: React.FC = () => {
                   </ul>
                 )}
               </div>
+
+              {/* Slots Section */}
               <div>
                 <h2
                   className="font-bold flex items-center cursor-pointer"
@@ -101,29 +104,45 @@ const DashboardLayout: React.FC = () => {
                   </ul>
                 )}
               </div>
+
+              {/* Bookings Section */}
               <div>
-                <ul>
-                  <li>
-                    <Link
-                      className="flex items-center gap-2 font-bold"
-                      to="bookings"
-                    >
-                      <PiBookmarksSimpleFill /> Bookings
-                    </Link>
-                  </li>
-                </ul>
+                <h2
+                  className="font-bold flex items-center cursor-pointer"
+                  onClick={() => toggleSection("bookings")}
+                >
+                  <PiBookmarksSimpleFill className="mr-2" />
+                  {sidebarOpen && "Bookings"}
+                </h2>
+                {openSection === "bookings" && sidebarOpen && (
+                  <ul className="space-y-2 ml-6 mt-2">
+                    <li>
+                      <Link className="flex items-center" to="bookings">
+                        <PiBookmarksSimpleFill className="mr-2" /> View Bookings
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </div>
+
+              {/* Users Section */}
               <div>
-                <ul>
-                  <li>
-                    <Link
-                      className="flex items-center gap-2 font-bold"
-                      to="users"
-                    >
-                      <FaUserPen /> Users
-                    </Link>
-                  </li>
-                </ul>
+                <h2
+                  className="font-bold flex items-center cursor-pointer"
+                  onClick={() => toggleSection("users")}
+                >
+                  <FaUserPen className="mr-2" />
+                  {sidebarOpen && "Users"}
+                </h2>
+                {openSection === "users" && sidebarOpen && (
+                  <ul className="space-y-2 ml-6 mt-2">
+                    <li>
+                      <Link className="flex items-center" to="users">
+                        <FaUserPen className="mr-2" /> Manage Users
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </div>
             </>
           )}

@@ -19,13 +19,13 @@ const FeaturedRoom = () => {
   console.log(rooms);
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4 md:px-0">
       <SectionHeader
         title="Our Luxury Rooms"
         description="Experience unmatched comfort and elegance in our Luxury Rooms, designed for those who appreciate the finer things in life."
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {rooms?.slice(0,4)?.map((room: TRoom) => (
+        {rooms?.slice(0, 4)?.map((room: TRoom) => (
           <CustomCard
             id={room?._id}
             key={room.roomNo} // Assuming roomNo as the unique key

@@ -96,7 +96,7 @@ const FilterPanel: React.FC = () => {
     <div className="pt-28 bg-white dark:bg-darkBg">
       <div className="md:flex max-w-7xl mx-auto">
         {/* Left Sidebar: Filters */}
-        <div className="md:w-1/4 w-full p-4 dark:text-white">
+        <div className="md:w-1/4 w-full pe-4 pt-4 dark:text-white">
           <h1 className="text-3xl flex items-center gap-4 text-secondary mb-6 dark:text-white">
             Filter <CiFilter className="text-primary" />
           </h1>
@@ -219,7 +219,7 @@ const FilterPanel: React.FC = () => {
         </div>
 
         {/* Right Content: Products, Sort By, and Search */}
-        <div className="md:w-3/4 w-full p-4">
+        <div className="md:w-3/4 w-full ps-4 pt-4">
           <div className="md:flex gap-5 md:space-y-0 space-y-3 justify-between mb-4 items-center">
             <div className="relative w-full md:w-3/4">
               <form onSubmit={handleSearchRoom}>

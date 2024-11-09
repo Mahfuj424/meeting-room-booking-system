@@ -1,6 +1,6 @@
 import React from "react";
 import { BsLinkedin } from "react-icons/bs";
-import { FaFacebook } from "react-icons/fa";
+import { FaEnvelope, FaFacebook, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FiSend } from "react-icons/fi";
 
@@ -77,38 +77,16 @@ const Footer: React.FC = () => {
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold mb-4 ">Contact-Us</h2>
           <div>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:underline">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Reservation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Offers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Room List
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  About Us
-                </a>
-              </li>
-            </ul>
+            <p className="mb-2">
+              <FaMapMarkerAlt className="inline" /> 123 Street, Old Trafford, <br />
+              New South London, UK
+            </p>
+            <p className="mb-2">
+              <FaEnvelope className="inline" /> info@site.com
+            </p>
+            <p className="mb-2">
+              <FaPhone className="inline" /> +017 88 372 355
+            </p>
           </div>
         </div>
 
@@ -142,7 +120,6 @@ const Footer: React.FC = () => {
               href="#"
               className="text-white rounded-full hover:text-opacity-80 p-2 bg-primary"
             >
-              
               <FaSquareXTwitter className="text-3xl" />
             </a>
           </div>

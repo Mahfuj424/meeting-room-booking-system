@@ -4,6 +4,9 @@ import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
 import { TiWeatherSunny } from "react-icons/ti";
 import { BsMoonStarsFill } from "react-icons/bs";
+import { useAppSelector } from "../../redux/hook";
+import { logOut, selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 interface MobileNavbarProps {
   drawerOpen: boolean;
@@ -21,6 +24,17 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
   toggleDarkMode,
 }) => {
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const logout = useSelector(logOut);
+  console.log(logout);
+  const user = useAppSelector(selectCurrentUser);
+  const handleLogout = () => {
+    dispatch(logOut());
+    localStorage.removeItem("location");
+    closeDrawer();
+  };
 
   const handleUserMenuToggle = () => {
     setUserMenuOpen(!userMenuOpen);
@@ -55,7 +69,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
               onClick={handleUserMenuToggle}
             >
               <div className="flex items-center gap-2">
-                <FaRegUserCircle className="text-4xl" />
+                {user?.image ? (
+                  <img src={user?.image} className="w-8 h-8 rounded-full" alt="profile" />
+                ) : (
+                  <FaRegUserCircle className="text-4xl" />
+                )}
                 <span>User Menu</span>
               </div>
               {userMenuOpen ? <FaChevronUp /> : <FaChevronDown />}
@@ -63,22 +81,32 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 
             {userMenuOpen && (
               <div className="mt-2 pl-8">
-                <Link
-                  to="/my-booking"
-                  onClick={closeDrawer}
-                  className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  My Booking
-                </Link>
-                <button
-                  className="block text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => {
-                    // Implement your logout logic here
-                    closeDrawer();
-                  }}
-                >
-                  Logout
-                </button>
+                {user?.role === "user" && (
+                  <Link
+                    to="/my-bookings"
+                    onClick={closeDrawer}
+                    className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    My Booking
+                  </Link>
+                )}
+                {user?.role === "admin" && (
+                  <Link
+                    to="/dashboard/rooms-list"
+                    onClick={closeDrawer}
+                    className="block px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                {user && (
+                  <button
+                    className="block text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                )}
                 <button
                   className="block text-left px-4 py-2 text-secondary dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => {
@@ -121,13 +149,15 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
               {item.name}
             </NavLink>
           ))}
-          <NavLink
-            to="/login"
-            onClick={closeDrawer}
-            className="bg-primary text-center text-white py-2 px-4 rounded-md hover:bg-primary/90 transition"
-          >
-            Login
-          </NavLink>
+          {!user && (
+            <NavLink
+              to="/auth"
+              onClick={closeDrawer}
+              className="bg-primary text-center text-white py-2 px-4 rounded-md hover:bg-primary/90 transition"
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
     </div>

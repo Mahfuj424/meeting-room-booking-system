@@ -24,7 +24,7 @@ const steps = [
 
 const BookingSteps: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-white dark:bg-darkBg text-secondary dark:text-white">
+    <div className="max-w-7xl mx-auto py-8 px-4 md:px-0 sm:px-6 bg-white dark:bg-darkBg text-secondary dark:text-white">
       <SectionHeader
         title="Easy Booking Steps"
         description="Streamline your reservation process with these three simple steps to book your stay quickly and effortlessly."

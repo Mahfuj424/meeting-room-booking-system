@@ -4,7 +4,7 @@ import CustomButton from "../../components/customButton/CustomButton";
 const Banner = () => {
   return (
     <div
-      className="max-w-7xl mx-auto py-24 pt-36 px-4 flex flex-col lg:flex-row items-center justify-between bg-white  dark:bg-darkBg"
+      className="max-w-7xl mx-auto py-24 pt-36 px-4 md:px-0 flex flex-col lg:flex-row items-center justify-between bg-white  dark:bg-darkBg"
       // Subtract 30px from the full screen height
     >
       <div className="text-content lg:w-1/2 text-black dark:text-white">

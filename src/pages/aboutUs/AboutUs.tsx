@@ -33,7 +33,7 @@ const AboutUs: React.FC = () => {
   return (
     <div className="py-20 dark:bg-darkBg">
       <HotelCard />
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-0 py-16">
         {/* Our Mission */}
         <section className="my-16">
           <h2 className="text-3xl font-bold text-secondary dark:text-white mb-6 text-center">
@@ -71,7 +71,9 @@ const AboutUs: React.FC = () => {
                 <h3 className="text-xl font-semibold dark:text-gray-300 text-gray-900">
                   {member.name}
                 </h3>
-                <p className="text-center dark:text-gray-300 text-gray-600">{member.bio}</p>
+                <p className="text-center dark:text-gray-300 text-gray-600">
+                  {member.bio}
+                </p>
               </div>
             ))}
           </div>

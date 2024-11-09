@@ -19,13 +19,12 @@ const Navbar = () => {
 
   const logout = useSelector(logOut);
   const user = useAppSelector(selectCurrentUser);
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
   const handleLogout = () => {
     dispatch(logOut());
     localStorage.removeItem("location");
+  };
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
   };
 
   const closeDrawer = () => {
@@ -100,7 +99,7 @@ const Navbar = () => {
             )}
           </div>
           {userMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkBg shadow-lg rounded-lg">
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-darkCard shadow-lg rounded-lg">
               {user?.role === "admin" && (
                 <div>
                   <Link
